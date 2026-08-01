@@ -1,0 +1,234 @@
+{% load static %}
+
+
+
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WebDevTracker — прогресс команды</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="stylesheet" href="{% static "main/css/style.css" %}" />
+</head>
+<body>
+<div class="container">
+
+  <!-- ШАПКА -->
+  <header class="header">
+    <div class="logo-area">
+      <div class="logo-icon"><i class="fas fa-code"></i></div>
+      <div class="logo-text">dev<span>Tracker</span></div>
+    </div>
+    <div class="header-actions">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" placeholder="Найти участника..." />
+      </div>
+      <div class="btn-primary">
+        <i class="fas fa-plus-circle"></i> Стать участником
+      </div>
+      <div class="btn-primary">
+        <i class="fas fa-plus-circle"></i> О нас
+      </div>
+    </div>
+  </header>
+
+  <!-- СТАТИСТИКА -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon"><i class="fas fa-users"></i></div>
+      <div class="stat-info">
+        <h4>Участники</h4>
+        <div class="number">12</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon"><i class="fas fa-tasks"></i></div>
+      <div class="stat-info">
+        <h4>Задач выполнено</h4>
+        <div class="number">184</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon"><i class="fas fa-rocket"></i></div>
+      <div class="stat-info">
+        <h4>Средний прогресс</h4>
+        <div class="number">67%</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+      <div class="stat-info">
+        <h4>Активность (нед.)</h4>
+        <div class="number">94%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- УЧАСТНИКИ -->
+  <div class="section-title">
+    <h2>👥 Участники</h2>
+    <a href="#">Все участники →</a>
+  </div>
+
+  <div class="members-grid">
+
+    <!-- карточка 1 -->
+    <div class="member-card">
+      <div class="member-top">
+        <div class="avatar">А</div>
+        <div class="member-info">
+          <h4>Алексей Иванов</h4>
+          <div class="role">Frontend • 2 месяца</div>
+        </div>
+      </div>
+      <div class="member-progress">
+        <div class="progress-label">
+          <span>Прогресс</span>
+          <span>82%</span>
+        </div>
+        <div class="progress-bar-small">
+          <div class="fill green" style="width: 82%;"></div>
+        </div>
+      </div>
+      <div class="member-footer">
+        <span><i class="fas fa-check-circle"></i> 22 задачи</span>
+        <span class="badge"><i class="far fa-clock"></i> 4 дня</span>
+      </div>
+    </div>
+
+    <!-- карточка 2 -->
+    <div class="member-card">
+      <div class="member-top">
+        <div class="avatar orange">Е</div>
+        <div class="member-info">
+          <h4>Екатерина Смирнова</h4>
+          <div class="role">Fullstack • 3 месяца</div>
+        </div>
+      </div>
+      <div class="member-progress">
+        <div class="progress-label">
+          <span>Прогресс</span>
+          <span>94%</span>
+        </div>
+        <div class="progress-bar-small">
+          <div class="fill orange" style="width: 94%;"></div>
+        </div>
+      </div>
+      <div class="member-footer">
+        <span><i class="fas fa-check-circle"></i> 31 задача</span>
+        <span class="badge"><i class="fas fa-fire" style="color:#d97706;"></i> лидер</span>
+      </div>
+    </div>
+
+    <!-- карточка 3 -->
+    <div class="member-card">
+      <div class="member-top">
+        <div class="avatar purple">М</div>
+        <div class="member-info">
+          <h4>Михаил Петров</h4>
+          <div class="role">Backend • 1.5 месяца</div>
+        </div>
+      </div>
+      <div class="member-progress">
+        <div class="progress-label">
+          <span>Прогресс</span>
+          <span>55%</span>
+        </div>
+        <div class="progress-bar-small">
+          <div class="fill purple" style="width: 55%;"></div>
+        </div>
+      </div>
+      <div class="member-footer">
+        <span><i class="fas fa-check-circle"></i> 14 задач</span>
+        <span class="badge"><i class="fas fa-hourglass-half"></i> в процессе</span>
+      </div>
+    </div>
+
+    <!-- карточка 4 -->
+    <div class="member-card">
+      <div class="member-top">
+        <div class="avatar pink">Д</div>
+        <div class="member-info">
+          <h4>Дарья Козлова</h4>
+          <div class="role">UX/UI + Frontend • 2 месяца</div>
+        </div>
+      </div>
+      <div class="member-progress">
+        <div class="progress-label">
+          <span>Прогресс</span>
+          <span>71%</span>
+        </div>
+        <div class="progress-bar-small">
+          <div class="fill pink" style="width: 71%;"></div>
+        </div>
+      </div>
+      <div class="member-footer">
+        <span><i class="fas fa-check-circle"></i> 19 задач</span>
+        <span class="badge"><i class="fas fa-star" style="color: #eab308;"></i> 3 недели</span>
+      </div>
+    </div>
+
+    <!-- карточка 5 -->
+    <div class="member-card">
+      <div class="member-top">
+        <div class="avatar" style="background: #dbeafe; color: #2563eb;">С</div>
+        <div class="member-info">
+          <h4>Сергей Васильев</h4>
+          <div class="role">React-разработчик • 1 месяц</div>
+        </div>
+      </div>
+      <div class="member-progress">
+        <div class="progress-label">
+          <span>Прогресс</span>
+          <span>43%</span>
+        </div>
+        <div class="progress-bar-small">
+          <div class="fill" style="width: 43%; background: #2563eb;"></div>
+        </div>
+      </div>
+      <div class="member-footer">
+        <span><i class="fas fa-check-circle"></i> 9 задач</span>
+        <span class="badge"><i class="fas fa-play"></i> старт</span>
+      </div>
+    </div>
+
+    <!-- карточка 6 -->
+    <div class="member-card">
+      <div class="member-top">
+        <div class="avatar" style="background: #f1e8ff; color: #6d28d9;">О</div>
+        <div class="member-info">
+          <h4>Ольга Новикова</h4>
+          <div class="role">DevOps + JS • 2.5 месяца</div>
+        </div>
+      </div>
+      <div class="member-progress">
+        <div class="progress-label">
+          <span>Прогресс</span>
+          <span>61%</span>
+        </div>
+        <div class="progress-bar-small">
+          <div class="fill" style="width: 61%; background: #6d28d9;"></div>
+        </div>
+      </div>
+      <div class="member-footer">
+        <span><i class="fas fa-check-circle"></i> 17 задач</span>
+        <span class="badge"><i class="fas fa-code"></i> 5 модулей</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- footer -->
+  <div style="margin-top: 3rem; text-align: center; color: #94a3b8; font-size: 0.85rem; border-top: 1px solid #e9eef3; padding-top: 2rem;">
+    <i class="fas fa-sync-alt fa-fw"></i> Обновлено сегодня · Всего 184 задачи выполнено
+  </div>
+
+</div>
+</body>
+</html>
