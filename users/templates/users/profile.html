@@ -1,0 +1,126 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Профиль участника — WebDevTracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="stylesheet" href="{% static 'users/css/profile.css' %}" />
+</head>
+<body>
+<div class="container">
+
+  <!-- ШАПКА -->
+  <header class="header">
+    <div class="logo-area">
+      <div class="logo-icon"><i class="fas fa-code"></i></div>
+      <div class="logo-text">dev<span>Tracker</span></div>
+    </div>
+    <div class="header-actions">
+      <a href="{% url 'main:index' %}" class="btn-secondary">
+        <i class="fas fa-arrow-left"></i> На главную
+      </a>
+    </div>
+  </header>
+
+  <!-- ПРОФИЛЬ -->
+  <div class="profile-grid">
+
+    <!-- Левая колонка -->
+    <div class="profile-left">
+      <div class="profile-card">
+        <div class="profile-avatar large">А</div>
+        <h2>Алексей Иванов</h2>
+        <div class="profile-role">Frontend-разработчик</div>
+        <div class="profile-meta">
+          <span><i class="fas fa-calendar-alt"></i> В проекте: 2 месяца</span>
+          <span><i class="fas fa-tasks"></i> 22 задачи выполнено</span>
+        </div>
+        <div class="profile-badges">
+          <span class="badge"><i class="fas fa-fire" style="color: #d97706;"></i> Лидер</span>
+          <span class="badge"><i class="fas fa-star" style="color: #eab308;"></i> 3 недели</span>
+        </div>
+        <div class="profile-social">
+          <a href="#"><i class="fab fa-github"></i></a>
+          <a href="#"><i class="fab fa-linkedin"></i></a>
+          <a href="#"><i class="fab fa-x-twitter"></i></a>
+          <a href="#"><i class="fab fa-telegram"></i></a>
+        </div>
+      </div>
+
+      <div class="profile-card">
+        <h4><i class="fas fa-chart-simple"></i> Статистика</h4>
+        <div class="stats-mini">
+          <div class="stat-mini">
+            <span class="stat-number">82%</span>
+            <span class="stat-label">Общий прогресс</span>
+          </div>
+          <div class="stat-mini">
+            <span class="stat-number">94%</span>
+            <span class="stat-label">Активность</span>
+          </div>
+          <div class="stat-mini">
+            <span class="stat-number">22</span>
+            <span class="stat-label">Задач выполнено</span>
+          </div>
+          <div class="stat-mini">
+            <span class="stat-number">28</span>
+            <span class="stat-label">Задач поставлено</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Правая колонка -->
+    <div class="profile-right">
+
+      <!-- Поставленные задачи -->
+      <div class="profile-card">
+        <h4><i class="fas fa-list-check"></i> Поставленные задачи</h4>
+        <div class="task-list">
+          <div class="task-item done">
+            <i class="fas fa-check-circle"></i>
+            <div>
+              <span class="task-name">Вёрстка главной страницы</span>
+              <span class="task-date">Завершено 2 дня назад</span>
+            </div>
+          </div>
+          <div class="task-item done">
+            <i class="fas fa-check-circle"></i>
+            <div>
+              <span class="task-name">Настройка React-роутинга</span>
+              <span class="task-date">Завершено 5 дней назад</span>
+            </div>
+          </div>
+          <div class="task-item in-progress">
+            <i class="fas fa-spinner fa-pulse"></i>
+            <div>
+              <span class="task-name">Интеграция API для профиля</span>
+              <span class="task-date">В процессе</span>
+            </div>
+          </div>
+          <div class="task-item pending">
+            <i class="fas fa-hourglass-half"></i>
+            <div>
+              <span class="task-name">Оптимизация загрузки</span>
+              <span class="task-date">Ожидает выполнения</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ПОДВАЛ -->
+  <div class="footer">
+    <i class="fas fa-sync-alt fa-fw"></i> Обновлено сегодня · Всего 184 задачи выполнено
+  </div>
+
+</div>
+</body>
+</html>

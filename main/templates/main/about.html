@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>О нас — WebDevTracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="stylesheet" href="{% static 'main/css/about.css' %}" />
+</head>
+<body>
+<div class="container">
+
+  <!-- ШАПКА -->
+  <header class="header">
+    <div class="logo-area">
+      <div class="logo-icon"><i class="fas fa-code"></i></div>
+      <div class="logo-text">dev<span>Tracker</span></div>
+    </div>
+    <div class="header-actions">
+      <a href="{% url 'main:index' %}" class="btn-primary">
+        <i class="fas fa-arrow-left"></i> На главную
+      </a>
+    </div>
+  </header>
+
+  <!-- ГЕРОЙ СЕКЦИЯ -->
+  <section class="hero-about">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <i class="fas fa-heart" style="color: #ef4444;"></i> О нас
+      </div>
+      <h1>Помогаем командам <span>расти</span> в веб-разработке</h1>
+      <p>
+        <strong>devTracker</strong> — это платформа, созданная для менторов, тимлидов 
+        и учебных команд. Мы верим, что прозрачный прогресс и командная работа 
+        — ключ к быстрому росту в IT.
+      </p>
+    </div>
+  </section>
+
+  <!-- ЦЕННОСТИ -->
+  <div class="values-section">
+    <h2>Наши ценности</h2>
+    <div class="subtitle">То, что мы ставим во главу угла</div>
+    <div class="values-grid">
+      <div class="value-card">
+        <i class="fas fa-graduation-cap"></i>
+        <h4>Обучение через практику</h4>
+        <p>Мы верим, что настоящий навык рождается только через решение реальных задач.</p>
+      </div>
+      <div class="value-card">
+        <i class="fas fa-handshake"></i>
+        <h4>Командный дух</h4>
+        <p>Индивидуальный прогресс важен, но вместе мы достигаем целей быстрее и эффективнее.</p>
+      </div>
+      <div class="value-card">
+        <i class="fas fa-eye"></i>
+        <h4>Прозрачность</h4>
+        <p>Каждый видит свой прогресс и прогресс команды — это мотивирует и объединяет.</p>
+      </div>
+      <div class="value-card">
+        <i class="fas fa-heart"></i>
+        <h4>Поддержка</h4>
+        <p>Мы создаём среду, где можно ошибаться, учиться и расти без страха осуждения.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ПОДВАЛ -->
+  <div class="footer">
+    <i class="fas fa-sync-alt fa-fw"></i> Обновлено сегодня · Всего 184 задачи выполнено
+  </div>
+
+</div>
+</body>
+</html>
