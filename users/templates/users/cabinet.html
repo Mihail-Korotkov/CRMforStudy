@@ -1,0 +1,197 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Личный кабинет — WebDevTracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="stylesheet" href="{% static 'users/css/cabinet.css' %}" />
+  <script src="{% static 'users/js/cabinet.js' %}"></script>
+  
+  
+</head>
+<body>
+<div class="container">
+
+  <!-- ШАПКА -->
+  <header class="header">
+    <div class="logo-area">
+      <div class="logo-icon"><i class="fas fa-code"></i></div>
+      <div class="logo-text">dev<span>Tracker</span></div>
+    </div>
+    <div class="header-actions">
+      <a href="{% url 'main:index' %}" class="btn-secondary">
+        <i class="fas fa-arrow-left"></i> На главную
+      </a>
+    </div>
+  </header>
+
+  <!-- ЛИЧНЫЙ КАБИНЕТ -->
+  <div class="profile-grid">
+
+    <!-- Левая колонка -->
+    <div class="profile-left">
+
+      <!-- Карточка профиля -->
+      <div class="profile-card">
+        <div class="avatar-wrapper">
+          <div class="profile-avatar" id="avatarPreview">
+            <i class="fas fa-user"></i>
+          </div>
+          <label class="avatar-upload">
+            <i class="fas fa-camera"></i>
+            <input type="file" accept="image/*" id="avatarInput" />
+          </label>
+        </div>
+        <h2 id="displayName">Алексей Иванов</h2>
+        <div class="profile-role">Frontend-разработчик</div>
+
+        <div class="edit-name-form">
+          <input type="text" id="nameInput" placeholder="Новое имя или псевдоним..." value="Алексей Иванов" />
+          <button class="btn-primary" id="saveNameBtn">
+            <i class="fas fa-pen"></i>
+          </button>
+        </div>
+
+        <div class="profile-meta">
+          <span><i class="fas fa-calendar-alt"></i> В проекте: 2 месяца</span>
+          <span><i class="fas fa-tasks"></i> 22 задачи выполнено</span>
+          <span><i class="fas fa-envelope"></i> <span id="currentEmail">alex@example.com</span></span>
+        </div>
+      </div>
+
+      <!-- Карточка смены логина -->
+      <div class="profile-card">
+        <h4><i class="fas fa-envelope"></i> Сменить email</h4>
+        <div class="change-login-form">
+          <input type="email" id="newEmailInput" placeholder="Новый email" />
+          <input type="email" id="confirmEmailInput" placeholder="Подтвердите email" />
+          <button class="btn-primary" id="changeEmailBtn">
+            <i class="fas fa-save"></i> Сменить email
+          </button>
+        </div>
+      </div>
+
+      <!-- Карточка смены пароля -->
+      <div class="profile-card">
+        <h4><i class="fas fa-lock"></i> Сменить пароль</h4>
+        <div class="change-password-form">
+          <div class="password-wrapper">
+            <input type="password" id="newPasswordInput" placeholder="Новый пароль (мин. 8 символов)" />
+            <button type="button" class="toggle-password-small toggle-pw">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <div class="password-wrapper">
+            <input type="password" id="confirmPasswordInput" placeholder="Подтвердите пароль" />
+            <button type="button" class="toggle-password-small toggle-pw">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <button class="btn-primary" id="changePasswordBtn">
+            <i class="fas fa-save"></i> Сменить пароль
+          </button>
+        </div>
+      </div>
+
+      <!-- Карточка социальных сетей -->
+      <div class="profile-card">
+        <h4><i class="fas fa-share-alt"></i> Социальные сети</h4>
+        <div class="social-links">
+          <div class="social-link-item">
+            <i class="fab fa-github"></i>
+            <input type="text" id="githubInput" placeholder="https://github.com/username" value="https://github.com/alexdev" />
+            <button class="btn-primary save-social" data-field="github">Сохранить</button>
+          </div>
+          <div class="social-link-item">
+            <i class="fab fa-linkedin"></i>
+            <input type="text" id="linkedinInput" placeholder="https://linkedin.com/in/username" value="https://linkedin.com/in/alexdev" />
+            <button class="btn-primary save-social" data-field="linkedin">Сохранить</button>
+          </div>
+          <div class="social-link-item">
+            <i class="fab fa-telegram"></i>
+            <input type="text" id="telegramInput" placeholder="https://t.me/username" value="https://t.me/alexdev" />
+            <button class="btn-primary save-social" data-field="telegram">Сохранить</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Правая колонка — Задачи -->
+    <div class="profile-right">
+      <div class="profile-card">
+        <h4><i class="fas fa-list-check"></i> Мои задачи</h4>
+
+        <!-- Форма добавления задачи -->
+        <div class="add-task-form">
+          <input type="text" id="taskInput" placeholder="Новая задача..." />
+          <button class="btn-primary" id="addTaskBtn">
+            <i class="fas fa-plus"></i> Добавить
+          </button>
+        </div>
+
+        <!-- Список задач -->
+        <div class="task-list" id="taskList">
+          <div class="task-item done">
+            <span class="task-icon"><i class="fas fa-check-circle"></i></span>
+            <div class="task-info">
+              <span class="task-name">Вёрстка главной страницы</span>
+              <span class="task-date">Завершено 2 дня назад</span>
+            </div>
+            <div class="task-actions">
+              <button class="btn-start"><i class="fas fa-play"></i> Начать</button>
+              <button class="btn-done"><i class="fas fa-check"></i> Выполнено</button>
+              <button class="btn-delete"><i class="fas fa-trash"></i></button>
+            </div>
+          </div>
+
+          <div class="task-item in-progress">
+            <span class="task-icon"><i class="fas fa-spinner fa-pulse"></i></span>
+            <div class="task-info">
+              <span class="task-name">Интеграция API для профиля</span>
+              <span class="task-date">В процессе</span>
+            </div>
+            <div class="task-actions">
+              <button class="btn-start"><i class="fas fa-play"></i> Начать</button>
+              <button class="btn-done"><i class="fas fa-check"></i> Выполнено</button>
+              <button class="btn-delete"><i class="fas fa-trash"></i></button>
+            </div>
+          </div>
+
+          <div class="task-item pending">
+            <span class="task-icon"><i class="fas fa-hourglass-half"></i></span>
+            <div class="task-info">
+              <span class="task-name">Оптимизация загрузки</span>
+              <span class="task-date">Ожидает выполнения</span>
+            </div>
+            <div class="task-actions">
+              <button class="btn-start"><i class="fas fa-play"></i> Начать</button>
+              <button class="btn-done"><i class="fas fa-check"></i> Выполнено</button>
+              <button class="btn-delete"><i class="fas fa-trash"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- УВЕДОМЛЕНИЕ -->
+  <div class="toast" id="toast">
+    <i class="fas fa-check-circle"></i>
+    <span id="toastMessage">Изменения сохранены</span>
+  </div>
+
+  <!-- ПОДВАЛ -->
+  <div class="footer">
+    <i class="fas fa-sync-alt fa-fw"></i> Обновлено сегодня · Всего 184 задачи выполнено
+  </div>
+
+</div>
+
+<script src="{% static 'main/js/cabinet.js' %}"></script>
+</body>
+</html>

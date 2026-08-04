@@ -1,0 +1,143 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Вход — WebDevTracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="stylesheet" href="{% static 'users/css/login.css' %}" />
+</head>
+<body>
+<div class="container">
+
+  <!-- ЛОГОТИП -->
+  <div class="logo-area">
+    <div class="logo-icon"><i class="fas fa-code"></i></div>
+    <div class="logo-text">dev<span>Tracker</span></div>
+  </div>
+
+  <!-- КАРТОЧКА ВХОДА -->
+  <div class="login-card">
+    <h1>Добро пожаловать</h1>
+    <p class="subtitle">Войдите в свой аккаунт</p>
+
+    <form id="loginForm" onsubmit="return false;">
+      <!-- Email -->
+      <div class="form-group">
+        <label for="email"><i class="fas fa-envelope"></i> Email</label>
+        <input type="email" id="email" placeholder="example@mail.com" required />
+      </div>
+
+      <!-- Пароль -->
+      <div class="form-group">
+        <label for="password"><i class="fas fa-lock"></i> Пароль</label>
+        <div class="password-wrapper">
+          <input type="password" id="password" placeholder="Введите пароль" required />
+          <button type="button" class="toggle-password" id="togglePassword">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Запомнить меня + Забыли пароль -->
+      <div class="form-extra">
+        <label class="remember-me">
+          <input type="checkbox" id="remember" />
+          Запомнить меня
+        </label>
+        <a href="#" class="forgot-link">Забыли пароль?</a>
+      </div>
+
+      <!-- Кнопка -->
+      <button type="submit" class="btn-primary" id="loginBtn">
+        <i class="fas fa-sign-in-alt"></i> Войти
+      </button>
+    </form>
+
+    <!-- Разделитель -->
+    <div class="divider">
+      <span>или продолжите с</span>
+    </div>
+
+    <!-- Социальные кнопки -->
+    <div class="social-buttons">
+      <button class="social-btn google">
+        <i class="fab fa-google"></i> Google
+      </button>
+      <button class="social-btn github">
+        <i class="fab fa-github"></i> GitHub
+      </button>
+    </div>
+
+    <!-- Ссылка на регистрацию -->
+    <div class="register-link">
+      Нет аккаунта? <a href="{% url 'user:registration' %}">Зарегистрироваться</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ========== ПОКАЗ/СКРЫТИЕ ПАРОЛЯ ==========
+  document.querySelectorAll('.toggle-password').forEach(button => {
+    button.addEventListener('click', function() {
+      const input = this.closest('.password-wrapper').querySelector('input');
+      const icon = this.querySelector('i');
+
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    });
+  });
+
+  // ========== АВТОРИЗАЦИЯ ==========
+  const loginBtn = document.getElementById('loginBtn');
+  const email = document.getElementById('email');
+  const password = document.getElementById('password');
+
+  loginBtn.addEventListener('click', function() {
+    // Простая валидация
+    if (!email.value.trim() || !email.value.includes('@')) {
+      alert('Введите корректный email');
+      email.focus();
+      return;
+    }
+
+    if (password.value.length < 8) {
+      alert('Пароль должен содержать минимум 8 символов');
+      password.focus();
+      return;
+    }
+
+    // Имитация успешного входа
+    const originalText = this.innerHTML;
+    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Вход...';
+    this.disabled = true;
+
+    setTimeout(() => {
+      alert('✅ Вход выполнен успешно! Добро пожаловать!');
+      this.innerHTML = originalText;
+      this.disabled = false;
+    }, 1500);
+  });
+
+  // Отправка по Enter
+  document.getElementById('loginForm').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      loginBtn.click();
+    }
+  });
+</script>
+</body>
+</html>
