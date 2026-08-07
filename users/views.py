@@ -40,9 +40,9 @@ class UserRegistrationView(SuccessMessageMixin, CreateView):
 
 
 
-class UserLoginView(LoginView):
+class UserLoginView(SuccessMessageMixin,LoginView):
     template_name = 'users/login.html'
-    success_url = 'main:index'
+    success_url = reverse_lazy('main:index')
     failure_url = 'user:login'
     form_class = UserLoginForm
     success_message = 'Вы успешно вошли в аккаунт'
