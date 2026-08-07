@@ -12,6 +12,11 @@ body {
   line-height: 1.5;
 }
 
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
 .container {
   max-width: 1280px;
   margin: 0 auto;
@@ -101,10 +106,12 @@ body {
   cursor: default;
   box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
   transition: 0.2s;
+  text-decoration: none;
 }
 
 .btn-primary i {
   font-size: 0.9rem;
+  text-decoration: none;
 }
 
 /* карточка статистики */

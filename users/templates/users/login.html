@@ -25,7 +25,8 @@
     <h1>Добро пожаловать</h1>
     <p class="subtitle">Войдите в свой аккаунт</p>
 
-    <form id="loginForm" onsubmit="return false;">
+    <form action = {% url "user:login" %} method = "post">
+      {% csrf_token %}
       <!-- Email -->
       <div class="form-group">
         <label for="email"><i class="fas fa-envelope"></i> Email</label>

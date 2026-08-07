@@ -29,12 +29,12 @@
         <i class="fas fa-search"></i>
         <input type="text" placeholder="Найти участника..." />
       </div>
-      <div class="btn-primary">
+      <a href = "{% url 'users:registration' %}" class="btn-primary">
         <i class="fas fa-plus-circle"></i> Стать участником
-      </div>
-      <div class="btn-primary">
+      </a>
+      <a href = "{% url 'main:about' %}" class="btn-primary">
         <i class="fas fa-plus-circle"></i> О нас
-      </div>
+      </a>
     </div>
   </header>
 
