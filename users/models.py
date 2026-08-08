@@ -27,6 +27,7 @@ class Users(AbstractUser):
         verbose_name = 'пользователь'
         verbose_name_plural = 'пользователи'
         db_table = 'users'
+        ordering = ['created_at']
 
     def __str__(self):
         return self.username

@@ -86,7 +86,7 @@
       <div class="member-top">
         <div class="avatar">
 
-          {% if user.avatar %}
+          {% if user.image %}
             <img src="{{ user.image.url }}" alt="...">
           {% else %}
             {{ user.username|first|default:"?" }}

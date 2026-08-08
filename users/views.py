@@ -57,7 +57,14 @@ class UserListView(ListView):
     model = Users  # Указываем модель, данные которой нужно вывести
     template_name = 'users/users_list.html'  # Путь к вашему шаблону
     context_object_name = 'users'  # Имя переменной в шаблоне (по умолчанию 'object_list')
-    
+    paginate_by = 2
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['total_users'] = Users.objects.count()
+        return context
+      # Количество объектов на странице 
+
 
 
 

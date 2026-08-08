@@ -40,7 +40,7 @@
       <div class="stat-icon"><i class="fas fa-users"></i></div>
       <div class="stat-info">
         <h4>Всего участников</h4>
-        <div class="number" id="totalUsers">12</div>
+        <div class="number" id="totalUsers">{{ total_users }}</div>     {% comment %}  тут надо поправить#{% endcomment %}
       </div>
     </div>
     <div class="stat-card">
@@ -81,27 +81,38 @@
   <div class="users-list" id="usersList">
 
     <!-- 1 -->
-    <div class="user-item" data-name="Алексей Иванов" data-progress="82" data-tasks="22" data-badge="leader">
-      <div class="user-avatar">А</div>
-      <div class="user-info">
-        <h4>Алексей Иванов</h4>
-        <div class="role">Frontend-разработчик</div>
-      </div>
-      <div class="user-stats">
-        <span class="stat-item"><i class="fas fa-check-circle"></i> 22 задачи</span>
-        <span class="stat-item"><i class="fas fa-calendar-alt"></i> 2 месяца</span>
-      </div>
-      <div class="user-progress-mini">
-        <div class="progress-bar-small">
-          <div class="fill" style="width: 82%;"></div>
-        </div>
-        <span class="progress-text">82%</span>
-      </div>
-      <span class="user-badge leader"><i class="fas fa-fire"></i> Лидер</span>
-    </div>
+     {% for user in users %}    
+     <div class="user-item" data-name="Алексей Иванов" data-progress="82" data-tasks="22" data-badge="leader">
+       <div class="user-avatar">
+         {% if user.image %}
+            <img src="{{ user.image.url }}" alt="...">
+         {% else %}
+            {{ user.username|first|default:"?" }}
+         {% endif %} 
+
+
+
+       </div>
+       <div class="user-info">
+         <h4>{{ user.username }}</h4>
+         <div class="role">{{user.role}}</div>
+       </div>
+       <div class="user-stats">
+         <span class="stat-item"><i class="fas fa-check-circle"></i> 22 задачи</span>
+         <span class="stat-item"><i class="fas fa-calendar-alt"></i> {{user.created_at|date:"d.m.Y"}}</span>
+       </div>
+       <div class="user-progress-mini">
+         <div class="progress-bar-small">
+           <div class="fill" style="width: 82%;"></div>
+         </div>
+         <span class="progress-text">82%</span>
+       </div>
+       <span class="user-badge leader"><i class="fas fa-fire"></i> Лидер</span>
+     </div>
+     {% endfor %}
 
     <!-- 2 -->
-    <div class="user-item" data-name="Екатерина Смирнова" data-progress="94" data-tasks="31" data-badge="leader">
+    {% comment %} <div class="user-item" data-name="Екатерина Смирнова" data-progress="94" data-tasks="31" data-badge="leader">
       <div class="user-avatar orange">Е</div>
       <div class="user-info">
         <h4>Екатерина Смирнова</h4>
@@ -240,17 +251,49 @@
       <span class="user-badge"><i class="fas fa-hourglass-half"></i> В процессе</span>
     </div>
 
-  </div>
+  </div> {% endcomment %}
 
   <!-- ПАГИНАЦИЯ -->
-  <div class="pagination">
+   {% if is_paginated %}
+<div class="pagination">
+    <!-- Кнопка "Назад" -->
+    {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+    {% else %}
+        <span class="disabled"><i class="fas fa-chevron-left"></i></span>
+    {% endif %}
+
+    <!-- Номера страниц -->
+    {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+            <span class="active">{{ num }}</span>
+        {% else %}
+            <a href="?page={{ num }}">{{ num }}</a>
+        {% endif %}
+    {% endfor %}
+
+    <!-- Кнопка "Вперед" -->
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">
+            <i class="fas fa-chevron-right"></i>
+        </a>
+    {% else %}
+        <span class="disabled"><i class="fas fa-chevron-right"></i></span>
+    {% endif %}
+</div>
+{% endif %}
+  {% comment %} <div class="pagination">
     <span class="disabled"><i class="fas fa-chevron-left"></i></span>
+
+    
     <span class="active">1</span>
     <a href="#">2</a>
     <a href="#">3</a>
     <a href="#">4</a>
     <a href="#"><i class="fas fa-chevron-right"></i></a>
-  </div>
+  </div> {% endcomment %}
 
   <!-- ПОДВАЛ -->
   <div class="footer">
