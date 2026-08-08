@@ -5,6 +5,7 @@ from django.db import models
 
 
 from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
 
 
 # Create your models here.
@@ -12,6 +13,15 @@ class Users(AbstractUser):
     image = models.ImageField(upload_to='users_images', null=True, blank=True, verbose_name='аватарка')
     created_at = models.DateTimeField(auto_now_add=True,verbose_name='дата создания')
     updated_at = models.DateTimeField(auto_now=True,verbose_name='дата обновления')
+    role = models.CharField(max_length=255,verbose_name='роль',default='user')
+
+    @property
+    def days_on_platform(self):
+        """Количество дней на платформе"""
+        delta = timezone.now() - self.created_at
+        return delta.days
+    
+    
 
     class Meta:
         verbose_name = 'пользователь'

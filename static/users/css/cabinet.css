@@ -242,10 +242,11 @@ body {
   margin-bottom: 1rem;
 }
 
+/* ===== СМЕНА ИМЕНИ ===== */
 .edit-name-form {
   display: flex;
   gap: 0.5rem;
-  margin-bottom: 1.2rem;
+  margin-bottom: 0.8rem;
 }
 
 .edit-name-form input {
@@ -274,13 +275,46 @@ body {
   flex-shrink: 0;
 }
 
+/* ===== СМЕНА РОЛИ ===== */
+.edit-role-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.2rem;
+}
+
+.edit-role-form input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.5rem 1rem;
+  border: 1px solid #e9eef3;
+  border-radius: 30px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  outline: none;
+  transition: 0.2s;
+  background: #f8fafc;
+  max-width: 100%;
+}
+
+.edit-role-form input:focus {
+  border-color: #4f46e5;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.edit-role-form .btn-primary {
+  padding: 0.5rem 1.2rem;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
 .profile-meta {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
   font-size: 0.9rem;
   color: #475569;
-  margin-bottom: 1rem;
+  margin-top: 0.5rem;
 }
 
 .profile-meta i {
@@ -666,6 +700,10 @@ body {
   }
 
   .edit-name-form {
+    flex-direction: column;
+  }
+
+  .edit-role-form {
     flex-direction: column;
   }
 

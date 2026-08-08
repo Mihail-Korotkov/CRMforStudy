@@ -10,9 +10,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <link rel="stylesheet" href="{% static 'users/css/cabinet.css' %}" />
-  <script src="{% static 'users/js/cabinet.js' %}"></script>
-  
-  
 </head>
 <body>
 <div class="container">
@@ -48,11 +45,19 @@
           </label>
         </div>
         <h2 id="displayName">Алексей Иванов</h2>
-        <div class="profile-role">Frontend-разработчик</div>
+        <div class="profile-role" id="displayRole">Frontend-разработчик</div>
 
         <div class="edit-name-form">
           <input type="text" id="nameInput" placeholder="Новое имя или псевдоним..." value="Алексей Иванов" />
           <button class="btn-primary" id="saveNameBtn">
+            <i class="fas fa-pen"></i>
+          </button>
+        </div>
+
+        <!-- Форма смены роли -->
+        <div class="edit-role-form">
+          <input type="text" id="roleInput" placeholder="Новая роль (должность)..." value="Frontend-разработчик" />
+          <button class="btn-primary" id="saveRoleBtn">
             <i class="fas fa-pen"></i>
           </button>
         </div>
@@ -192,6 +197,6 @@
 
 </div>
 
-<script src="{% static 'main/js/cabinet.js' %}"></script>
+<script src="{% static 'users/js/cabinet.js' %}"></script>
 </body>
 </html>

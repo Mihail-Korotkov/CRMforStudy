@@ -6,7 +6,7 @@ app_name = 'main'
 
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('', views.MainView.as_view(), name='index'),
     path('about/', views.AboutView.as_view(), name='about'),
     
 ]

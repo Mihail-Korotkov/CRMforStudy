@@ -6,7 +6,16 @@ from users.models import Progress
 from users.models import Tasks
 
 
-admin.site.register(Users)
+@admin.register(Users)
+class UsersAdmin(admin.ModelAdmin):
+    list_display = (
+        'username', 
+        'email', 
+        'role', 
+        'created_at', 
+        'updated_at'
+    )
+    
 
 
 admin.site.register(Progress)

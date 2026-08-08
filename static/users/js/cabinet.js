@@ -46,6 +46,25 @@ nameInput.addEventListener('keypress', function(e) {
   if (e.key === 'Enter') saveNameBtn.click();
 });
 
+// ========== ИЗМЕНЕНИЕ РОЛИ ==========
+const roleInput = document.getElementById('roleInput');
+const displayRole = document.getElementById('displayRole');
+const saveRoleBtn = document.getElementById('saveRoleBtn');
+
+saveRoleBtn.addEventListener('click', function() {
+  const newRole = roleInput.value.trim();
+  if (newRole) {
+    displayRole.textContent = newRole;
+    showToast('Роль обновлена');
+  } else {
+    showToast('Роль не может быть пустой', true);
+  }
+});
+
+roleInput.addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') saveRoleBtn.click();
+});
+
 // ========== СМЕНА EMAIL ==========
 const newEmailInput = document.getElementById('newEmailInput');
 const confirmEmailInput = document.getElementById('confirmEmailInput');
@@ -190,4 +209,64 @@ function addTask(taskName, status = 'pending') {
 
   taskItem.querySelector('.btn-delete').addEventListener('click', function() {
     this.closest('.task-item').remove();
-    showToast('За
+    showToast('Задача удалена');
+  });
+
+  taskList.prepend(taskItem);
+  taskInput.value = '';
+  showToast('Задача добавлена');
+}
+
+function updateTaskIconsAndDate(item, status) {
+  const icon = item.querySelector('.task-icon');
+  const dateSpan = item.querySelector('.task-date');
+  const icons = {
+    done: '<i class="fas fa-check-circle"></i>',
+    'in-progress': '<i class="fas fa-spinner fa-pulse"></i>',
+    pending: '<i class="fas fa-hourglass-half"></i>'
+  };
+  const labels = {
+    done: 'Завершено только что',
+    'in-progress': 'В процессе',
+    pending: 'Ожидает выполнения'
+  };
+  icon.innerHTML = icons[status];
+  dateSpan.textContent = labels[status];
+}
+
+function updateTaskButtons(item, status) {
+  const startBtn = item.querySelector('.btn-start');
+  const doneBtn = item.querySelector('.btn-done');
+
+  if (status === 'done') {
+    startBtn.style.display = 'none';
+    doneBtn.style.display = 'none';
+  } else if (status === 'in-progress') {
+    startBtn.style.display = 'none';
+    doneBtn.style.display = 'inline-block';
+  } else {
+    startBtn.style.display = 'inline-block';
+    doneBtn.style.display = 'none';
+  }
+}
+
+addTaskBtn.addEventListener('click', function() {
+  addTask(taskInput.value, 'pending');
+});
+
+taskInput.addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') {
+    addTaskBtn.click();
+  }
+});
+
+document.querySelectorAll('.task-item').forEach(item => {
+  const classes = item.className;
+  if (classes.includes('done')) {
+    updateTaskButtons(item, 'done');
+  } else if (classes.includes('in-progress')) {
+    updateTaskButtons(item, 'in-progress');
+  } else {
+    updateTaskButtons(item, 'pending');
+  }
+});

@@ -1,0 +1,264 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Список пользователей — WebDevTracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="stylesheet" href="{% static 'users/css/users_list.css' %}" />
+</head>
+<body>
+<div class="container">
+
+  <!-- ШАПКА -->
+  <header class="header">
+    <div class="logo-area">
+      <div class="logo-icon"><i class="fas fa-code"></i></div>
+      <div class="logo-text">dev<span>Tracker</span></div>
+    </div>
+    <div class="header-actions">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Найти участника..." />
+      </div>
+      <a href="{% url 'users:registration' %}" class="btn-primary">
+        <i class="fas fa-user-plus"></i> Стать участником
+      </a>
+      <a href="{% url 'main:index' %}" class="btn-secondary">
+        <i class="fas fa-arrow-left"></i> На главную
+      </a>
+    </div>
+  </header>
+
+  <!-- СТАТИСТИКА -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon"><i class="fas fa-users"></i></div>
+      <div class="stat-info">
+        <h4>Всего участников</h4>
+        <div class="number" id="totalUsers">12</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon"><i class="fas fa-trophy"></i></div>
+      <div class="stat-info">
+        <h4>Лидеров</h4>
+        <div class="number" id="totalLeaders">3</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon"><i class="fas fa-calendar-plus"></i></div>
+      <div class="stat-info">
+        <h4>Новых (за 7 дней)</h4>
+        <div class="number" id="totalNew">2</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ФИЛЬТРЫ -->
+  <div class="filters-bar">
+    <div class="filter-tabs" id="filterTabs">
+      <button class="filter-tab active" data-filter="all"><i class="fas fa-users"></i> Все</button>
+      <button class="filter-tab" data-filter="leaders"><i class="fas fa-trophy"></i> Лидеры</button>
+      <button class="filter-tab" data-filter="new"><i class="fas fa-user-plus"></i> Новые</button>
+    </div>
+    <div class="filter-sort">
+      <label for="sortSelect">Сортировать:</label>
+      <select id="sortSelect">
+        <option value="progress-desc">По прогрессу ↓</option>
+        <option value="progress-asc">По прогрессу ↑</option>
+        <option value="name">По имени ↑</option>
+        <option value="tasks">По задачам ↓</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- СПИСОК ПОЛЬЗОВАТЕЛЕЙ -->
+  <div class="users-list" id="usersList">
+
+    <!-- 1 -->
+    <div class="user-item" data-name="Алексей Иванов" data-progress="82" data-tasks="22" data-badge="leader">
+      <div class="user-avatar">А</div>
+      <div class="user-info">
+        <h4>Алексей Иванов</h4>
+        <div class="role">Frontend-разработчик</div>
+      </div>
+      <div class="user-stats">
+        <span class="stat-item"><i class="fas fa-check-circle"></i> 22 задачи</span>
+        <span class="stat-item"><i class="fas fa-calendar-alt"></i> 2 месяца</span>
+      </div>
+      <div class="user-progress-mini">
+        <div class="progress-bar-small">
+          <div class="fill" style="width: 82%;"></div>
+        </div>
+        <span class="progress-text">82%</span>
+      </div>
+      <span class="user-badge leader"><i class="fas fa-fire"></i> Лидер</span>
+    </div>
+
+    <!-- 2 -->
+    <div class="user-item" data-name="Екатерина Смирнова" data-progress="94" data-tasks="31" data-badge="leader">
+      <div class="user-avatar orange">Е</div>
+      <div class="user-info">
+        <h4>Екатерина Смирнова</h4>
+        <div class="role">Fullstack-разработчик</div>
+      </div>
+      <div class="user-stats">
+        <span class="stat-item"><i class="fas fa-check-circle"></i> 31 задача</span>
+        <span class="stat-item"><i class="fas fa-calendar-alt"></i> 3 месяца</span>
+      </div>
+      <div class="user-progress-mini">
+        <div class="progress-bar-small">
+          <div class="fill" style="width: 94%;"></div>
+        </div>
+        <span class="progress-text">94%</span>
+      </div>
+      <span class="user-badge leader"><i class="fas fa-fire"></i> Лидер</span>
+    </div>
+
+    <!-- 3 -->
+    <div class="user-item" data-name="Михаил Петров" data-progress="55" data-tasks="14" data-badge="in-progress">
+      <div class="user-avatar purple">М</div>
+      <div class="user-info">
+        <h4>Михаил Петров</h4>
+        <div class="role">Backend-разработчик</div>
+      </div>
+      <div class="user-stats">
+        <span class="stat-item"><i class="fas fa-check-circle"></i> 14 задач</span>
+        <span class="stat-item"><i class="fas fa-calendar-alt"></i> 1.5 месяца</span>
+      </div>
+      <div class="user-progress-mini">
+        <div class="progress-bar-small">
+          <div class="fill" style="width: 55%;"></div>
+        </div>
+        <span class="progress-text">55%</span>
+      </div>
+      <span class="user-badge"><i class="fas fa-hourglass-half"></i> В процессе</span>
+    </div>
+
+    <!-- 4 -->
+    <div class="user-item" data-name="Дарья Козлова" data-progress="71" data-tasks="19" data-badge="in-progress">
+      <div class="user-avatar pink">Д</div>
+      <div class="user-info">
+        <h4>Дарья Козлова</h4>
+        <div class="role">UX/UI + Frontend</div>
+      </div>
+      <div class="user-stats">
+        <span class="stat-item"><i class="fas fa-check-circle"></i> 19 задач</span>
+        <span class="stat-item"><i class="fas fa-calendar-alt"></i> 2 месяца</span>
+      </div>
+      <div class="user-progress-mini">
+        <div class="progress-bar-small">
+          <div class="fill" style="width: 71%;"></div>
+        </div>
+        <span class="progress-text">71%</span>
+      </div>
+      <span class="user-badge"><i class="fas fa-star"></i> 3 недели</span>
+    </div>
+
+    <!-- 5 -->
+    <div class="user-item" data-name="Сергей Васильев" data-progress="43" data-tasks="9" data-badge="new">
+      <div class="user-avatar blue">С</div>
+      <div class="user-info">
+        <h4>Сергей Васильев</h4>
+        <div class="role">React-разработчик</div>
+      </div>
+      <div class="user-stats">
+        <span class="stat-item"><i class="fas fa-check-circle"></i> 9 задач</span>
+        <span class="stat-item"><i class="fas fa-calendar-alt"></i> 1 месяц</span>
+      </div>
+      <div class="user-progress-mini">
+        <div class="progress-bar-small">
+          <div class="fill" style="width: 43%;"></div>
+        </div>
+        <span class="progress-text">43%</span>
+      </div>
+      <span class="user-badge new"><i class="fas fa-play"></i> Старт</span>
+    </div>
+
+    <!-- 6 -->
+    <div class="user-item" data-name="Ольга Новикова" data-progress="61" data-tasks="17" data-badge="in-progress">
+      <div class="user-avatar" style="background: #f1e8ff; color: #6d28d9;">О</div>
+      <div class="user-info">
+        <h4>Ольга Новикова</h4>
+        <div class="role">DevOps + JavaScript</div>
+      </div>
+      <div class="user-stats">
+        <span class="stat-item"><i class="fas fa-check-circle"></i> 17 задач</span>
+        <span class="stat-item"><i class="fas fa-calendar-alt"></i> 2.5 месяца</span>
+      </div>
+      <div class="user-progress-mini">
+        <div class="progress-bar-small">
+          <div class="fill" style="width: 61%;"></div>
+        </div>
+        <span class="progress-text">61%</span>
+      </div>
+      <span class="user-badge"><i class="fas fa-code"></i> 5 модулей</span>
+    </div>
+
+    <!-- 7 -->
+    <div class="user-item" data-name="Иван Соколов" data-progress="28" data-tasks="5" data-badge="new">
+      <div class="user-avatar" style="background: #d1fae5; color: #16a34a;">И</div>
+      <div class="user-info">
+        <h4>Иван Соколов</h4>
+        <div class="role">Junior Frontend</div>
+      </div>
+      <div class="user-stats">
+        <span class="stat-item"><i class="fas fa-check-circle"></i> 5 задач</span>
+        <span class="stat-item"><i class="fas fa-calendar-alt"></i> 2 недели</span>
+      </div>
+      <div class="user-progress-mini">
+        <div class="progress-bar-small">
+          <div class="fill" style="width: 28%;"></div>
+        </div>
+        <span class="progress-text">28%</span>
+      </div>
+      <span class="user-badge new"><i class="fas fa-rocket"></i> Новичок</span>
+    </div>
+
+    <!-- 8 -->
+    <div class="user-item" data-name="Анна Морозова" data-progress="48" data-tasks="12" data-badge="in-progress">
+      <div class="user-avatar" style="background: #fce7f3; color: #db2777;">А</div>
+      <div class="user-info">
+        <h4>Анна Морозова</h4>
+        <div class="role">QA + Frontend</div>
+      </div>
+      <div class="user-stats">
+        <span class="stat-item"><i class="fas fa-check-circle"></i> 12 задач</span>
+        <span class="stat-item"><i class="fas fa-calendar-alt"></i> 1.5 месяца</span>
+      </div>
+      <div class="user-progress-mini">
+        <div class="progress-bar-small">
+          <div class="fill" style="width: 48%;"></div>
+        </div>
+        <span class="progress-text">48%</span>
+      </div>
+      <span class="user-badge"><i class="fas fa-hourglass-half"></i> В процессе</span>
+    </div>
+
+  </div>
+
+  <!-- ПАГИНАЦИЯ -->
+  <div class="pagination">
+    <span class="disabled"><i class="fas fa-chevron-left"></i></span>
+    <span class="active">1</span>
+    <a href="#">2</a>
+    <a href="#">3</a>
+    <a href="#">4</a>
+    <a href="#"><i class="fas fa-chevron-right"></i></a>
+  </div>
+
+  <!-- ПОДВАЛ -->
+  <div class="footer">
+    <i class="fas fa-sync-alt fa-fw"></i> Обновлено сегодня · Всего 184 задачи выполнено
+  </div>
+
+</div>
+
+<script src="{% static 'main/js/users_list.js' %}"></script>
+</body>
+</html>

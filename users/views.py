@@ -3,9 +3,12 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, TemplateView
 from django.contrib.auth.views import LoginView
 from django.contrib.messages.views import SuccessMessageMixin
-from django.views.generic import CreateView
+from django.views.generic import CreateView,ListView
+
+
 
 from users.forms import UserLoginForm, UserRegistrationForm
+from users.models import Users
 
 
 # Create your views here.
@@ -47,6 +50,13 @@ class UserLoginView(SuccessMessageMixin,LoginView):
     form_class = UserLoginForm
     success_message = 'Вы успешно вошли в аккаунт'
     failure_message = 'Неверный логин или пароль'
+
+
+
+class UserListView(ListView):
+    model = Users  # Указываем модель, данные которой нужно вывести
+    template_name = 'users/users_list.html'  # Путь к вашему шаблону
+    context_object_name = 'users'  # Имя переменной в шаблоне (по умолчанию 'object_list')
     
 
 
