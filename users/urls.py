@@ -7,5 +7,8 @@ urlpatterns = [
     path('cabinet/', views.UserCabinetView.as_view(), name='cabinet'),
     path('registration/', views.UserRegistrationView.as_view(), name='registration'),
     path('login/', views.UserLoginView.as_view(), name='login'),
-    path('users-list/', views.UserListView.as_view(), name='users-list')
+    path('users-list/', views.UserListView.as_view(), name='users-list'),
+    path('cabinet/update-profile/', views.UserProfileUpdateView.as_view(), name='update_profile'),
+    path('cabinet/change-password/', views.UserPasswordChangeView.as_view(), name='change_password'),
+    
 ]

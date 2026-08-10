@@ -14,6 +14,9 @@ class Users(AbstractUser):
     created_at = models.DateTimeField(auto_now_add=True,verbose_name='дата создания')
     updated_at = models.DateTimeField(auto_now=True,verbose_name='дата обновления')
     role = models.CharField(max_length=255,verbose_name='роль',default='user')
+    github_url = models.URLField(max_length=200, blank=True, null=True)
+    linkedin_url = models.URLField(max_length=200, blank=True, null=True)
+    telegram_url = models.URLField(max_length=200, blank=True, null=True)
 
     @property
     def days_on_platform(self):

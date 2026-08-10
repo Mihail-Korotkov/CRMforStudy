@@ -27,101 +27,139 @@
     </div>
   </header>
 
+  <!-- Сообщения -->
+  {% if messages %}
+    <div class="messages">
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
   <!-- ЛИЧНЫЙ КАБИНЕТ -->
   <div class="profile-grid">
 
     <!-- Левая колонка -->
     <div class="profile-left">
 
-      <!-- Карточка профиля -->
+      <!-- Карточка профиля с формой -->
       <div class="profile-card">
-        <div class="avatar-wrapper">
-          <div class="profile-avatar" id="avatarPreview">
-            <i class="fas fa-user"></i>
+        <form method="post" enctype="multipart/form-data" action="{% url 'users:update_profile' %}">
+          {% csrf_token %}
+          
+          <div class="avatar-wrapper">
+            <div class="profile-avatar" id="avatarPreview">
+              {% if user.image %}
+                <img src="{{ user.image.url }}" alt="Avatar" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">
+              {% else %}
+                <i class="fas fa-user"></i>
+              {% endif %}
+            </div>
+            <label class="avatar-upload">
+              <i class="fas fa-camera"></i>
+              {{ form.image }}
+            </label>
           </div>
-          <label class="avatar-upload">
-            <i class="fas fa-camera"></i>
-            <input type="file" accept="image/*" id="avatarInput" />
-          </label>
-        </div>
-        <h2 id="displayName">Алексей Иванов</h2>
-        <div class="profile-role" id="displayRole">Frontend-разработчик</div>
 
-        <div class="edit-name-form">
-          <input type="text" id="nameInput" placeholder="Новое имя или псевдоним..." value="Алексей Иванов" />
-          <button class="btn-primary" id="saveNameBtn">
-            <i class="fas fa-pen"></i>
+          <!-- Поле для имени пользователя -->
+          <div class="edit-name-form">
+            {{ form.username }}
+            <button type="submit" class="btn-primary" name="update_profile">
+              <i class="fas fa-pen"></i>
+            </button>
+          </div>
+
+          <!-- Поле для роли -->
+          <div class="edit-role-form">
+            {{ form.role }}
+            <button type="submit" class="btn-primary" name="update_profile">
+              <i class="fas fa-pen"></i>
+            </button>
+          </div>
+
+          <div class="profile-meta">
+            <span><i class="fas fa-calendar-alt"></i> В проекте: {{ user.days_on_platform }} дней</span>
+            <span><i class="fas fa-tasks"></i> {{ user.tasks_done|default:"0" }} задач выполнено</span>
+            <span><i class="fas fa-envelope"></i> {{ user.email }}</span>
+          </div>
+
+          <!-- Поля для email и соцсетей -->
+          <div class="profile-form-fields">
+            <div class="field-group">
+              <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+              {{ form.email }}
+            </div>
+            <div class="field-group">
+              <label for="{{ form.github_url.id_for_label }}">{{ form.github_url.label }}</label>
+              {{ form.github_url }}
+            </div>
+            <div class="field-group">
+              <label for="{{ form.linkedin_url.id_for_label }}">{{ form.linkedin_url.label }}</label>
+              {{ form.linkedin_url }}
+            </div>
+            <div class="field-group">
+              <label for="{{ form.telegram_url.id_for_label }}">{{ form.telegram_url.label }}</label>
+              {{ form.telegram_url }}
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary" name="update_profile" style="width:100%; margin-top:15px;">
+            <i class="fas fa-save"></i> Сохранить профиль
           </button>
-        </div>
-
-        <!-- Форма смены роли -->
-        <div class="edit-role-form">
-          <input type="text" id="roleInput" placeholder="Новая роль (должность)..." value="Frontend-разработчик" />
-          <button class="btn-primary" id="saveRoleBtn">
-            <i class="fas fa-pen"></i>
-          </button>
-        </div>
-
-        <div class="profile-meta">
-          <span><i class="fas fa-calendar-alt"></i> В проекте: 2 месяца</span>
-          <span><i class="fas fa-tasks"></i> 22 задачи выполнено</span>
-          <span><i class="fas fa-envelope"></i> <span id="currentEmail">alex@example.com</span></span>
-        </div>
-      </div>
-
-      <!-- Карточка смены логина -->
-      <div class="profile-card">
-        <h4><i class="fas fa-envelope"></i> Сменить email</h4>
-        <div class="change-login-form">
-          <input type="email" id="newEmailInput" placeholder="Новый email" />
-          <input type="email" id="confirmEmailInput" placeholder="Подтвердите email" />
-          <button class="btn-primary" id="changeEmailBtn">
-            <i class="fas fa-save"></i> Сменить email
-          </button>
-        </div>
+        </form>
       </div>
 
       <!-- Карточка смены пароля -->
       <div class="profile-card">
         <h4><i class="fas fa-lock"></i> Сменить пароль</h4>
-        <div class="change-password-form">
-          <div class="password-wrapper">
-            <input type="password" id="newPasswordInput" placeholder="Новый пароль (мин. 8 символов)" />
-            <button type="button" class="toggle-password-small toggle-pw">
-              <i class="fas fa-eye"></i>
+        <form method="post" action="{% url 'users:change_password' %}">
+          {% csrf_token %}
+          <div class="change-password-form">
+            <!-- ОБЯЗАТЕЛЬНО: поле для старого пароля -->
+            <div class="password-wrapper">
+              <input type="password" name="old_password" placeholder="Старый пароль" required />
+              <button type="button" class="toggle-password-small toggle-pw">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+            <div class="password-wrapper">
+              <input type="password" name="new_password1" placeholder="Новый пароль (мин. 8 символов)" required />
+              <button type="button" class="toggle-password-small toggle-pw">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+            <div class="password-wrapper">
+              <input type="password" name="new_password2" placeholder="Подтвердите пароль" required />
+              <button type="button" class="toggle-password-small toggle-pw">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+            <button type="submit" class="btn-primary">
+              <i class="fas fa-save"></i> Сменить пароль
             </button>
           </div>
-          <div class="password-wrapper">
-            <input type="password" id="confirmPasswordInput" placeholder="Подтвердите пароль" />
-            <button type="button" class="toggle-password-small toggle-pw">
-              <i class="fas fa-eye"></i>
-            </button>
-          </div>
-          <button class="btn-primary" id="changePasswordBtn">
-            <i class="fas fa-save"></i> Сменить пароль
-          </button>
-        </div>
+        </form>
       </div>
 
-      <!-- Карточка социальных сетей -->
+      <!-- Карточка социальных сетей (отображение) -->
       <div class="profile-card">
-        <h4><i class="fas fa-share-alt"></i> Социальные сети</h4>
+        <h4><i class="fas fa-share-alt"></i> Мои соцсети</h4>
         <div class="social-links">
-          <div class="social-link-item">
-            <i class="fab fa-github"></i>
-            <input type="text" id="githubInput" placeholder="https://github.com/username" value="https://github.com/alexdev" />
-            <button class="btn-primary save-social" data-field="github">Сохранить</button>
-          </div>
-          <div class="social-link-item">
-            <i class="fab fa-linkedin"></i>
-            <input type="text" id="linkedinInput" placeholder="https://linkedin.com/in/username" value="https://linkedin.com/in/alexdev" />
-            <button class="btn-primary save-social" data-field="linkedin">Сохранить</button>
-          </div>
-          <div class="social-link-item">
-            <i class="fab fa-telegram"></i>
-            <input type="text" id="telegramInput" placeholder="https://t.me/username" value="https://t.me/alexdev" />
-            <button class="btn-primary save-social" data-field="telegram">Сохранить</button>
-          </div>
+          {% if user.github_url %}
+            <div><i class="fab fa-github"></i> <a href="{{ user.github_url }}" target="_blank">{{ user.github_url }}</a></div>
+          {% else %}
+            <div><i class="fab fa-github"></i> GitHub не указан</div>
+          {% endif %}
+          {% if user.linkedin_url %}
+            <div><i class="fab fa-linkedin"></i> <a href="{{ user.linkedin_url }}" target="_blank">{{ user.linkedin_url }}</a></div>
+          {% else %}
+            <div><i class="fab fa-linkedin"></i> LinkedIn не указан</div>
+          {% endif %}
+          {% if user.telegram_url %}
+            <div><i class="fab fa-telegram"></i> <a href="{{ user.telegram_url }}" target="_blank">{{ user.telegram_url }}</a></div>
+          {% else %}
+            <div><i class="fab fa-telegram"></i> Telegram не указан</div>
+          {% endif %}
         </div>
       </div>
     </div>
@@ -141,44 +179,7 @@
 
         <!-- Список задач -->
         <div class="task-list" id="taskList">
-          <div class="task-item done">
-            <span class="task-icon"><i class="fas fa-check-circle"></i></span>
-            <div class="task-info">
-              <span class="task-name">Вёрстка главной страницы</span>
-              <span class="task-date">Завершено 2 дня назад</span>
-            </div>
-            <div class="task-actions">
-              <button class="btn-start"><i class="fas fa-play"></i> Начать</button>
-              <button class="btn-done"><i class="fas fa-check"></i> Выполнено</button>
-              <button class="btn-delete"><i class="fas fa-trash"></i></button>
-            </div>
-          </div>
-
-          <div class="task-item in-progress">
-            <span class="task-icon"><i class="fas fa-spinner fa-pulse"></i></span>
-            <div class="task-info">
-              <span class="task-name">Интеграция API для профиля</span>
-              <span class="task-date">В процессе</span>
-            </div>
-            <div class="task-actions">
-              <button class="btn-start"><i class="fas fa-play"></i> Начать</button>
-              <button class="btn-done"><i class="fas fa-check"></i> Выполнено</button>
-              <button class="btn-delete"><i class="fas fa-trash"></i></button>
-            </div>
-          </div>
-
-          <div class="task-item pending">
-            <span class="task-icon"><i class="fas fa-hourglass-half"></i></span>
-            <div class="task-info">
-              <span class="task-name">Оптимизация загрузки</span>
-              <span class="task-date">Ожидает выполнения</span>
-            </div>
-            <div class="task-actions">
-              <button class="btn-start"><i class="fas fa-play"></i> Начать</button>
-              <button class="btn-done"><i class="fas fa-check"></i> Выполнено</button>
-              <button class="btn-delete"><i class="fas fa-trash"></i></button>
-            </div>
-          </div>
+          <!-- ... ваш список задач ... -->
         </div>
       </div>
     </div>
