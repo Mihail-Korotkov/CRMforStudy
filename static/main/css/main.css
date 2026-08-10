@@ -295,6 +295,45 @@ a {
   color: #1e293b;
 }
 
+/* ========== НОВЫЙ БЛОК: КНОПКА "ВЫЙТИ" ========== */
+.btn-logout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.4rem;
+  border-radius: 40px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  background: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+  text-decoration: none;
+  transition: 0.2s;
+  width: 100%;
+  cursor: pointer;
+}
+
+.btn-logout:hover {
+  background: #fecaca;
+  border-color: #fca5a5;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15);
+}
+
+.btn-logout i {
+  font-size: 0.9rem;
+}
+
+/* Адаптив для кнопки выхода */
+@media (max-width: 700px) {
+  .btn-logout {
+    padding: 0.8rem;
+    font-size: 0.9rem;
+  }
+}
+/* ========== КОНЕЦ НОВОГО БЛОКА ========== */
+
 /* Адаптив */
 @media (max-width: 700px) {
   .header {

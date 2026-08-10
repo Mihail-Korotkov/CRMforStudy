@@ -1,5 +1,6 @@
+from django.contrib import auth
 from django.shortcuts import redirect, render
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, TemplateView, UpdateView
 from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.contrib.messages.views import SuccessMessageMixin
@@ -7,6 +8,8 @@ from django.views.generic import CreateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+
 
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
@@ -53,6 +56,11 @@ class UserCabinetView(TemplateView):
         # Передаем форму профиля с данными текущего пользователя
         context['form'] = UserUpdateProfileForm(instance=self.request.user)
         return context
+
+@login_required
+def logout(request):
+    auth.logout(request)
+    return redirect(reverse('main:index'))
 
     
 
