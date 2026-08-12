@@ -1,7 +1,7 @@
 from django.contrib import auth
 from django.shortcuts import get_list_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
-from django.views.generic import CreateView, TemplateView, UpdateView
+from django.views.generic import CreateView, DetailView, TemplateView, UpdateView
 from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import CreateView, ListView
@@ -19,15 +19,40 @@ from django.contrib import messages
 from users.forms import UserLoginForm, UserRegistrationForm, UserUpdateProfileForm
 
 
-from users.models import Users
+from users.models import Progress, Users
 from users.utils import q_search
 
 
 
 # Create your views here.
-class UserProfileView(TemplateView):
+class UserDetailView(DetailView):
+    model = Users
     template_name = "users/profile.html"
-    # form_class = ProfileForm
+    context_object_name = "profile_user"
+    pk_url_kwarg = "user_id"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.object
+        user_progress = Progress.objects.filter(user=user)
+        completed_tasks = user_progress.filter(task__status=True)
+
+        context['completed_tasks_count'] = completed_tasks.count()
+        context['total_tasks_count'] = user_progress.count()
+        context['user_tasks'] = [p.task for p in user_progress][:5]
+
+        total = user_progress.count()
+        if total > 0:
+            context['user_progress'] = int((completed_tasks.count() / total) * 100)
+        else:
+            context['user_progress'] = 0
+            
+        context['activity_percentage'] = 94  # Здесь можно добавить реальный расчет
+        
+        return context
+
+
+
 
 
 class UserProfileUpdateView(LoginRequiredMixin, View):

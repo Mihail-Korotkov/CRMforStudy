@@ -94,6 +94,7 @@
 
   <div class="members-grid">
     {% for user in users|slice:":6" %}
+    <a href="{% url 'users:user_detail' user.id %}" class="member-card-link" style="text-decoration: none; color: inherit; display: block;">
     <div class="member-card">
       <div class="member-top">
         <div class="avatar">

@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Профиль участника — WebDevTracker</title>
+  <title>Профиль {{ profile_user.username }} — WebDevTracker</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
@@ -33,22 +33,38 @@
     <!-- Левая колонка -->
     <div class="profile-left">
       <div class="profile-card">
-        <div class="profile-avatar large">А</div>
-        <h2>Алексей Иванов</h2>
-        <div class="profile-role">Frontend-разработчик</div>
+        <div class="profile-avatar large">
+          {% if profile_user.image %}
+            <img src="{{ profile_user.image.url }}" alt="{{ profile_user.username }}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+          {% else %}
+            {{ profile_user.username|first|default:"?" }}
+          {% endif %}
+        </div>
+        <h2>{{ profile_user.username }}</h2>
+        <div class="profile-role">{{ profile_user.role|default:"Участник" }}</div>
         <div class="profile-meta">
-          <span><i class="fas fa-calendar-alt"></i> В проекте: 2 месяца</span>
-          <span><i class="fas fa-tasks"></i> 22 задачи выполнено</span>
+          <span><i class="fas fa-calendar-alt"></i> В проекте: {{ profile_user.days_on_platform }} дней</span>
+          <span><i class="fas fa-tasks"></i> {{ completed_tasks_count|default:"0" }} задач выполнено</span>
         </div>
         <div class="profile-badges">
-          <span class="badge"><i class="fas fa-fire" style="color: #d97706;"></i> Лидер</span>
-          <span class="badge"><i class="fas fa-star" style="color: #eab308;"></i> 3 недели</span>
+          {% if profile_user.days_on_platform > 30 %}
+          <span class="badge"><i class="fas fa-fire" style="color: #d97706;"></i> Ветеран</span>
+          {% endif %}
+          <span class="badge"><i class="fas fa-star" style="color: #eab308;"></i> {{ profile_user.days_on_platform }} дней</span>
         </div>
         <div class="profile-social">
-          <a href="#"><i class="fab fa-github"></i></a>
-          <a href="#"><i class="fab fa-linkedin"></i></a>
-          <a href="#"><i class="fab fa-x-twitter"></i></a>
-          <a href="#"><i class="fab fa-telegram"></i></a>
+          {% if profile_user.github_url %}
+            <a href="{{ profile_user.github_url }}" target="_blank"><i class="fab fa-github"></i></a>
+          {% endif %}
+          {% if profile_user.linkedin_url %}
+            <a href="{{ profile_user.linkedin_url }}" target="_blank"><i class="fab fa-linkedin"></i></a>
+          {% endif %}
+          {% if profile_user.telegram_url %}
+            <a href="{{ profile_user.telegram_url }}" target="_blank"><i class="fab fa-telegram"></i></a>
+          {% endif %}
+          {% if not profile_user.github_url and not profile_user.linkedin_url and not profile_user.telegram_url %}
+            <span style="color: #94a3b8; font-size: 0.9rem;">Социальные сети не добавлены</span>
+          {% endif %}
         </div>
       </div>
 
@@ -56,20 +72,20 @@
         <h4><i class="fas fa-chart-simple"></i> Статистика</h4>
         <div class="stats-mini">
           <div class="stat-mini">
-            <span class="stat-number">82%</span>
+            <span class="stat-number">{{ user_progress|default:"0" }}%</span>
             <span class="stat-label">Общий прогресс</span>
           </div>
           <div class="stat-mini">
-            <span class="stat-number">94%</span>
+            <span class="stat-number">{{ activity_percentage|default:"0" }}%</span>
             <span class="stat-label">Активность</span>
           </div>
           <div class="stat-mini">
-            <span class="stat-number">22</span>
+            <span class="stat-number">{{ completed_tasks_count|default:"0" }}</span>
             <span class="stat-label">Задач выполнено</span>
           </div>
           <div class="stat-mini">
-            <span class="stat-number">28</span>
-            <span class="stat-label">Задач поставлено</span>
+            <span class="stat-number">{{ total_tasks_count|default:"0" }}</span>
+            <span class="stat-label">Всего задач</span>
           </div>
         </div>
       </div>
@@ -77,48 +93,43 @@
 
     <!-- Правая колонка -->
     <div class="profile-right">
-
-      <!-- Поставленные задачи -->
       <div class="profile-card">
-        <h4><i class="fas fa-list-check"></i> Поставленные задачи</h4>
+        <h4><i class="fas fa-list-check"></i> Задачи</h4>
         <div class="task-list">
-          <div class="task-item done">
-            <i class="fas fa-check-circle"></i>
-            <div>
-              <span class="task-name">Вёрстка главной страницы</span>
-              <span class="task-date">Завершено 2 дня назад</span>
+          {% if user_tasks %}
+            {% for task in user_tasks %}
+            <div class="task-item {% if task.status %}done{% else %}in-progress{% endif %}">
+              {% if task.status %}
+                <i class="fas fa-check-circle" style="color: #22c55e;"></i>
+              {% else %}
+                <i class="fas fa-spinner fa-pulse" style="color: #eab308;"></i>
+              {% endif %}
+              <div>
+                <span class="task-name">{{ task.title }}</span>
+                <span class="task-date">
+                  {% if task.status %}
+                    Завершено
+                  {% else %}
+                    В процессе
+                  {% endif %}
+                </span>
+              </div>
             </div>
-          </div>
-          <div class="task-item done">
-            <i class="fas fa-check-circle"></i>
-            <div>
-              <span class="task-name">Настройка React-роутинга</span>
-              <span class="task-date">Завершено 5 дней назад</span>
-            </div>
-          </div>
-          <div class="task-item in-progress">
-            <i class="fas fa-spinner fa-pulse"></i>
-            <div>
-              <span class="task-name">Интеграция API для профиля</span>
-              <span class="task-date">В процессе</span>
-            </div>
-          </div>
-          <div class="task-item pending">
-            <i class="fas fa-hourglass-half"></i>
-            <div>
-              <span class="task-name">Оптимизация загрузки</span>
-              <span class="task-date">Ожидает выполнения</span>
-            </div>
-          </div>
+            {% endfor %}
+          {% else %}
+            <p style="color: #94a3b8; text-align: center; padding: 20px 0;">
+              <i class="fas fa-inbox"></i> Нет задач
+            </p>
+          {% endif %}
         </div>
       </div>
-
     </div>
+
   </div>
 
   <!-- ПОДВАЛ -->
   <div class="footer">
-    <i class="fas fa-sync-alt fa-fw"></i> Обновлено сегодня · Всего 184 задачи выполнено
+    <i class="fas fa-sync-alt fa-fw"></i> Обновлено сегодня
   </div>
 
 </div>
