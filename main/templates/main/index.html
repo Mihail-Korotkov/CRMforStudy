@@ -25,10 +25,18 @@
       <div class="logo-text">dev<span>Tracker</span></div>
     </div>
     <div class="header-actions">
-      <div class="search-box">
+      <form action="{% url 'users:search' %}" method="get">
+    <div class="search-box">
         <i class="fas fa-search"></i>
-        <input type="text" placeholder="Найти участника..." />
-      </div>
+        <input 
+            type="text" 
+            name="q" 
+            id="searchInput" 
+            placeholder="Найти участника по имени или роли..."
+            value="{{ request.GET.q }}"  <!-- Сохраняем введенный текст -->
+        />
+    </div>
+</form>
       <a href = "{% url 'users:registration' %}" class="btn-primary">
         <i class="fas fa-plus-circle"></i> Стать участником
       </a>
@@ -256,7 +264,7 @@
 
   <!-- footer -->
   <div style="margin-top: 3rem; text-align: center; color: #94a3b8; font-size: 0.85rem; border-top: 1px solid #e9eef3; padding-top: 2rem;">
-    <i class="fas fa-sync-alt fa-fw"></i> Обновлено сегодня · Всего 184 задачи выполнено
+    <i class="fas fa-sync-alt fa-fw"></i> Обновлено сегодня · 
   </div>
 
 </div>

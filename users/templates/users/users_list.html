@@ -21,10 +21,18 @@
       <div class="logo-text">dev<span>Tracker</span></div>
     </div>
     <div class="header-actions">
-      <div class="search-box">
+      <form action="{% url 'users:search' %}" method="get">
+    <div class="search-box">
         <i class="fas fa-search"></i>
-        <input type="text" id="searchInput" placeholder="Найти участника..." />
-      </div>
+        <input 
+            type="text" 
+            name="q" 
+            id="searchInput" 
+            placeholder="Найти участника по имени или роли..."
+            value="{{ request.GET.q }}"  <!-- Сохраняем введенный текст -->
+        />
+    </div>
+</form>
       <a href="{% url 'users:registration' %}" class="btn-primary">
         <i class="fas fa-user-plus"></i> Стать участником
       </a>
@@ -258,7 +266,7 @@
 <div class="pagination">
     <!-- Кнопка "Назад" -->
     {% if page_obj.has_previous %}
-        <a href="?page={{ page_obj.previous_page_number }}">
+        <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{request.GET.q}}{% endif %}">
             <i class="fas fa-chevron-left"></i>
         </a>
     {% else %}
@@ -270,13 +278,13 @@
         {% if page_obj.number == num %}
             <span class="active">{{ num }}</span>
         {% else %}
-            <a href="?page={{ num }}">{{ num }}</a>
+            <a href="?page={{ num }}{% if request.GET.q %}&q={{request.GET.q}}{% endif %}">{{ num }}</a>
         {% endif %}
     {% endfor %}
 
     <!-- Кнопка "Вперед" -->
     {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}">
+        <a href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{request.GET.q}}{% endif %}">
             <i class="fas fa-chevron-right"></i>
         </a>
     {% else %}

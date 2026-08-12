@@ -1,5 +1,5 @@
 from django.contrib import auth
-from django.shortcuts import redirect, render
+from django.shortcuts import get_list_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, TemplateView, UpdateView
 from django.contrib.auth.views import LoginView, PasswordChangeView
@@ -20,6 +20,8 @@ from users.forms import UserLoginForm, UserRegistrationForm, UserUpdateProfileFo
 
 
 from users.models import Users
+from users.utils import q_search
+
 
 
 # Create your views here.
@@ -96,6 +98,27 @@ class UserListView(ListView):
         context = super().get_context_data(**kwargs)
         context["total_users"] = Users.objects.count()
         return context
+
+    def get_queryset(self):
+        role_filter = self.request.GET.get("role")
+        order_by = self.request.GET.get("order_by")
+        query = self.request.GET.get('q')
+
+        users = Users.objects.all()
+ 
+        if query:
+            users = q_search(query)
+        else:
+            users = Users.objects.all()
+
+        # if on_sale:
+        #     goods =  goods.filter(discount__gt=0)
+
+        # if order_by and order_by !=  "default":  
+        #     goods= goods.order_by(order_by)
+        
+
+        return users
 
     # Количество объектов на странице
 
