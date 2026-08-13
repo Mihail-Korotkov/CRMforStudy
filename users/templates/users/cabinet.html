@@ -79,7 +79,7 @@
 
           <div class="profile-meta">
             <span><i class="fas fa-calendar-alt"></i> В проекте: {{ user.days_on_platform }} дней</span>
-            <span><i class="fas fa-tasks"></i> {{ user.tasks_done|default:"0" }} задач выполнено</span>
+            <span><i class="fas fa-tasks"></i> {{tasks_done|default:"0" }} задач выполнено</span>
             <span><i class="fas fa-envelope"></i> {{ user.email }}</span>
           </div>
 
@@ -174,21 +174,45 @@
       <div class="profile-card">
         <h4><i class="fas fa-list-check"></i> Мои задачи</h4>
 
-        <!-- Форма добавления задачи -->
-        <div class="add-task-form">
-          <input type="text" id="taskInput" placeholder="Новая задача..." />
-          <button class="btn-primary" id="addTaskBtn">
+      <form method = "post" action="{% url 'users:add_task_simple' %}" class="add-task-form">
+        {% csrf_token %}
+          <input type="text" id="taskInput" name = "task_title" placeholder="Новая задача..." />
+          <button type = "submit" class="btn-primary" >
             <i class="fas fa-plus"></i> Добавить
           </button>
-        </div>
+      </form> <!-- Форма добавления задачи -->
 
         <!-- Список задач -->
-        <div class="task-list" id="taskList">
-          <!-- ... ваш список задач ... -->
+       <div class="task-list" id="taskList">
+            {% if user_tasks %}
+                {% for progress in user_tasks %}
+                <div class="task-item" data-task-id="{{ progress.task.id }}">
+                    <div class="task-checkbox-wrapper">
+                        <input type="checkbox" class="task-checkbox" {% if progress.task.status %}checked{% endif %} 
+                               onclick="window.location.href='{% url 'users:toggle_task_simple' progress.task.id %}'">
+                    </div>
+                    <span class="task-title" style="{% if progress.task.status %}text-decoration: line-through; color: #94a3b8;{% endif %}">
+                        {{ progress.task.title }}
+                    </span>
+                    <span class="task-date">{{ progress.created_at|date:"d.m.Y H:i" }}</span>
+                    <div class="task-actions">
+                        <a href="{% url 'users:delete_task_simple' progress.task.id %}" 
+                           class="task-btn delete-task" 
+                           onclick="return confirm('Вы уверены, что хотите удалить эту задачу?')"
+                           title="Удалить">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="empty-tasks">Нет задач. Добавьте первую!</div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-tasks">Нет задач. Добавьте первую!</div>
+            {% endif %}
         </div>
-      </div>
     </div>
-  </div>
+</div>
 
   <!-- УВЕДОМЛЕНИЕ -->
   <div class="toast" id="toast">

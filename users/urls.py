@@ -13,6 +13,10 @@ urlpatterns = [
     path('logout/', views.logout, name = 'logout'),
     path('search/', views.UserListView.as_view(), name='search'),
     path('profile/<int:user_id>/', views.UserDetailView.as_view(), name='user_detail'),
+    path('cabinet/add-task-simple/',views.add_task_simple, name='add_task_simple'),
+    path('cabinet/delete-task-simple/<int:task_id>/',views.delete_task_simple, name='delete_task_simple'),
+    path('cabinet/toggle-task-simple/<int:task_id>/', views.toggle_task_simple, name='toggle_task_simple'),
+    
     
     
 ]

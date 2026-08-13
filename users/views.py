@@ -19,7 +19,7 @@ from django.contrib import messages
 from users.forms import UserLoginForm, UserRegistrationForm, UserUpdateProfileForm
 
 
-from users.models import Progress, Users
+from users.models import Progress, Tasks, Users
 from users.utils import q_search
 
 
@@ -82,7 +82,18 @@ class UserCabinetView(TemplateView):
         context = super().get_context_data(**kwargs)
         # Передаем форму профиля с данными текущего пользователя
         context['form'] = UserUpdateProfileForm(instance=self.request.user)
+        context['user_tasks'] = Progress.objects.filter(
+            user=self.request.user
+        ).select_related('task').order_by('-created_at')
+
+        context['tasks_done'] = Progress.objects.filter(
+            user=self.request.user,
+            task__status=True
+        ).count()
+
+
         return context
+        
 
 @login_required
 def logout(request):
@@ -167,4 +178,48 @@ class UserPasswordChangeView(PasswordChangeView):
             for error in errors:
                 messages.error(self.request, error)
         return redirect('users:cabinet')
+@login_required
+def add_task_simple(request):
+    if request.method == 'POST':
+        task_title = request.POST.get('task_title','').strip()
+        if task_title:
+            task,created = Tasks.objects.get_or_create(
+                title = task_title,
+                defaults = {'description':f'Задача:{task_title}'}
+            )
+            if not Progress.objects.filter(user=request.user, task=task).exists():
+                Progress.objects.create(user= request.user, task = task)
+                messages.success(request,f'Задача"{task_title}" добавлена!')
+            else:
+                messages.warning(request,"эта задача уже у вас в списке")
+        else:
+            messages.error(request,"Название задачи не может быть пустым")
+    return redirect('users:cabinet')
 
+
+@login_required
+def delete_task_simple(request, task_id):
+    try:
+        progress = Progress.objects.get(user = request.user, task_id = task_id)
+        progress.delete()
+        messages.success(request,"Задача удалена")
+    except Progress.DoesNotExist:
+        messages.error(request,"Задача не найдена")
+        
+    return redirect('users:cabinet')
+
+@login_required
+def toggle_task_simple(request, task_id):
+    """Переключение статуса задачи (выполнена/не выполнена)"""
+    try:
+        progress = Progress.objects.get(user=request.user, task_id=task_id)
+        task = progress.task
+        task.status = not task.status
+        task.save()
+        
+        status_text = 'выполнена' if task.status else 'возобновлена'
+        messages.success(request, f'Задача "{task.title}" {status_text}')
+    except Progress.DoesNotExist:
+        messages.error(request, 'Задача не найдена')
+    
+    return redirect('users:cabinet')
