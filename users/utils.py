@@ -9,3 +9,5 @@ def q_search(query):
         Q(email__icontains=query) |
         Q(role__icontains=query)
     )
+
+

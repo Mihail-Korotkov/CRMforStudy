@@ -67,21 +67,28 @@
       <div class="stat-icon"><i class="fas fa-tasks"></i></div>
       <div class="stat-info">
         <h4>Задач выполнено</h4>
-        <div class="number">184</div>
+        <div class="number">
+          {{ tasks_done.count }}
+        </div>
       </div>
     </div>
     <div class="stat-card">
       <div class="stat-icon"><i class="fas fa-rocket"></i></div>
       <div class="stat-info">
         <h4>Средний прогресс</h4>
-        <div class="number">67%</div>
+        <div class="number">
+          {{ tasks_done_percent }}%
+
+        </div>
       </div>
     </div>
     <div class="stat-card">
       <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
       <div class="stat-info">
         <h4>Активность (нед.)</h4>
-        <div class="number">94%</div>
+        <div class="number">
+          {{ activity_percent }}
+          %</div>
       </div>
     </div>
   </div>
