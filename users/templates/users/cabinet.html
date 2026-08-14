@@ -187,12 +187,17 @@
             {% if user_tasks %}
                 {% for progress in user_tasks %}
                 <div class="task-item" data-task-id="{{ progress.task.id }}">
-                    <div class="task-checkbox-wrapper">
+                
+                    <div class="checkbox-container">
                         <input type="checkbox" class="task-checkbox" {% if progress.task.status %}checked{% endif %} 
                                onclick="window.location.href='{% url 'users:toggle_task_simple' progress.task.id %}'">
+                        <label for="task_{{ progress.task.id }}">выполнена</label>
                     </div>
-                    <span class="task-title" style="{% if progress.task.status %}text-decoration: line-through; color: #94a3b8;{% endif %}">
+                    <span class="task-title" style="{% if progress.task.status %}text-decoration: line-through; color: #888782;{% endif %}">
+                      <p class = "task-text">
                         {{ progress.task.title }}
+                      </p>
+
                     </span>
                     <span class="task-date">{{ progress.created_at|date:"d.m.Y H:i" }}</span>
                     <div class="task-actions">

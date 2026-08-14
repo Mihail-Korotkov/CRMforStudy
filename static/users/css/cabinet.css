@@ -536,8 +536,35 @@ body {
   background: #f1f5f9;
 }
 
-.task-checkbox-wrapper {
-  flex-shrink: 0;
+.task-title-wrapper {
+    display: inline-block;
+    padding: 4px 0;
+}
+
+.task-title {
+    display: inline-block;
+    padding: 6px 14px;
+    border: 2px solid #eaeaec;
+    border-radius: 20px;
+    background: #4f46e5(7, 170, 245);
+    font-size: 0.95rem;
+    color: #f3f3f5;
+    transition: all 0.3s ease;
+}
+
+.checkbox-container {
+  border: 2px solid #250fe7; 
+  
+  /* Добавляем внутренние отступы, чтобы текст не прилипал к рамке */
+  padding: 10px 15px; 
+  
+  /* Скругляем углы рамки */
+  border-radius: 6px; 
+  
+  /* Выравниваем чекбокс и текст ровно по центру по вертикали */
+  display: inline-flex;
+  align-items: center;
+  gap: 10px; /* Расстояние между чекбоксом и текстом */
 }
 
 .task-checkbox {
