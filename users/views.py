@@ -20,7 +20,7 @@ from users.forms import UserLoginForm, UserRegistrationForm, UserUpdateProfileFo
 
 
 from users.models import Progress, Tasks, Users
-from users.utils import q_search
+from users.utils import get_activity_for_user, q_search
 
 
 
@@ -40,14 +40,15 @@ class UserDetailView(DetailView):
         context['completed_tasks_count'] = completed_tasks.count()
         context['total_tasks_count'] = user_progress.count()
         context['user_tasks'] = [p.task for p in user_progress][:5]
-
+        context['get_activity_for_week'] = get_activity_for_user(user)
+    
         total = user_progress.count()
         if total > 0:
             context['user_progress'] = int((completed_tasks.count() / total) * 100)
         else:
             context['user_progress'] = 0
             
-        context['activity_percentage'] = 94  # Здесь можно добавить реальный расчет
+        context['activity_percentage'] = 94  
         
         return context
 

@@ -28,3 +28,4 @@ def get_activity_percentage():
     ).values('user').distinct().count()
     
     return int((active_users / total_users) * 100)
+
