@@ -128,14 +128,14 @@
       <div class="member-progress">
         <div class="progress-label">
           <span>Прогресс</span>
-          <span>82%</span>
+          <span>{{user.progress_percent}}%</span>
         </div>
         <div class="progress-bar-small">
-          <div class="fill green" style="width: 82%;"></div>
+          <div class="fill green" style="width: {{user.progress_percent}}%;"></div>
         </div>
       </div>
       <div class="member-footer">
-        <span><i class="fas fa-check-circle"></i> 22 задачи</span>
+        <span><i class="fas fa-check-circle"></i> {{user.total_tasks}} задач</span>
         <span class="badge"><i class="far fa-clock"></i>{{user.days_on_platform}} дня(ей) с нами</span>
       </div>
     </div>

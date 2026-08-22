@@ -54,33 +54,46 @@
     <div class="stat-card">
       <div class="stat-icon"><i class="fas fa-trophy"></i></div>
       <div class="stat-info">
-        <h4>Лидеров</h4>
-        <div class="number" id="totalLeaders">3</div>
+        <h4>Лидеров:</h4>
+        <div class="number" id="totalLeaders">{{count_leaders}}</div>
       </div>
     </div>
     <div class="stat-card">
       <div class="stat-icon"><i class="fas fa-calendar-plus"></i></div>
       <div class="stat-info">
         <h4>Новых (за 7 дней)</h4>
-        <div class="number" id="totalNew">2</div>
+        <div class="number" id="totalNew">{{new_in_last_week}}</div>
       </div>
     </div>
   </div>
 
-  <!-- ФИЛЬТРЫ -->
+    <!-- ФИЛЬТРЫ -->
   <div class="filters-bar">
     <div class="filter-tabs" id="filterTabs">
-      <button class="filter-tab active" data-filter="all"><i class="fas fa-users"></i> Все</button>
-      <button class="filter-tab" data-filter="leaders"><i class="fas fa-trophy"></i> Лидеры</button>
-      <button class="filter-tab" data-filter="new"><i class="fas fa-user-plus"></i> Новые</button>
+      <!-- 🔥 Теперь кнопки отправляют форму с параметрами -->
+      <a href="?filter=all&sort={{ current_sort }}{% if search_query %}&q={{ search_query }}{% endif %}" 
+         class="filter-tab {% if current_filter == 'all' %}active{% endif %}" 
+         data-filter="all">
+        <i class="fas fa-users"></i> Все
+      </a>
+      <a href="?filter=leaders&sort={{ current_sort }}{% if search_query %}&q={{ search_query }}{% endif %}" 
+         class="filter-tab {% if current_filter == 'leaders' %}active{% endif %}" 
+         data-filter="leaders">
+        <i class="fas fa-trophy"></i> Лидеры
+      </a>
+      <a href="?filter=new&sort={{ current_sort }}{% if search_query %}&q={{ search_query }}{% endif %}" 
+         class="filter-tab {% if current_filter == 'new' %}active{% endif %}" 
+         data-filter="new">
+        <i class="fas fa-user-plus"></i> Новые
+      </a>
     </div>
     <div class="filter-sort">
       <label for="sortSelect">Сортировать:</label>
       <select id="sortSelect">
-        <option value="progress-desc">По прогрессу ↓</option>
-        <option value="progress-asc">По прогрессу ↑</option>
-        <option value="name">По имени ↑</option>
-        <option value="tasks">По задачам ↓</option>
+        <option value="progress-desc" {% if current_sort == 'progress-desc' %}selected{% endif %}>По прогрессу ↓</option>
+        <option value="progress-asc" {% if current_sort == 'progress-asc' %}selected{% endif %}>По прогрессу ↑</option>
+        <option value="tasks" {% if current_sort == 'tasks' %}selected{% endif %}>По задачам ↓</option>
+        <option value="id">По умолчанию</option>
       </select>
     </div>
   </div>
@@ -89,8 +102,9 @@
   <div class="users-list" id="usersList">
 
     <!-- 1 -->
-     {% for user in users %}    
-     <div class="user-item" data-name="Алексей Иванов" data-progress="82" data-tasks="22" data-badge="leader">
+     {% for user in users %} 
+     <a href="{% url 'users:user_detail' user.id %}" class="member-card-link" style="text-decoration: none; color: inherit; display: block;">   
+     <div class="user-item">
        <div class="user-avatar">
          {% if user.image %}
             <img src="{{ user.image.url }}" alt="...">
@@ -106,16 +120,19 @@
          <div class="role">{{user.role}}</div>
        </div>
        <div class="user-stats">
-         <span class="stat-item"><i class="fas fa-check-circle"></i> 22 задачи</span>
+         <span class="stat-item"><i class="fas fa-check-circle"></i> {{ user.completed_tasks }}</span>
          <span class="stat-item"><i class="fas fa-calendar-alt"></i> {{user.created_at|date:"d.m.Y"}}</span>
        </div>
        <div class="user-progress-mini">
          <div class="progress-bar-small">
-           <div class="fill" style="width: 82%;"></div>
+           <div class="fill" style="width: {{user.progress_percent}}%;"></div>
          </div>
-         <span class="progress-text">82%</span>
+         <span class="progress-text">{{user.progress_percent}}%</span>
        </div>
-       <span class="user-badge leader"><i class="fas fa-fire"></i> Лидер</span>
+      {% if user.progress_percent == max_progress and user.progress_percent > 0 %}
+      <span class="user-badge leader"><i class="fas fa-fire"></i> в числе лидеров</span>
+      {% endif %}
+
      </div>
      {% endfor %}
 
@@ -262,11 +279,14 @@
   </div> {% endcomment %}
 
   <!-- ПАГИНАЦИЯ -->
-   {% if is_paginated %}
+ {% if is_paginated %}
 <div class="pagination">
     <!-- Кнопка "Назад" -->
     {% if page_obj.has_previous %}
-        <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{request.GET.q}}{% endif %}">
+        <a href="?page={{ page_obj.previous_page_number }}
+                 {% if search_query %}&q={{ search_query }}{% endif %}
+                 {% if current_filter and current_filter != 'all' %}&filter={{ current_filter }}{% endif %}
+                 {% if current_sort and current_sort != 'id' %}&sort={{ current_sort }}{% endif %}">
             <i class="fas fa-chevron-left"></i>
         </a>
     {% else %}
@@ -278,13 +298,21 @@
         {% if page_obj.number == num %}
             <span class="active">{{ num }}</span>
         {% else %}
-            <a href="?page={{ num }}{% if request.GET.q %}&q={{request.GET.q}}{% endif %}">{{ num }}</a>
+            <a href="?page={{ num }}
+                     {% if search_query %}&q={{ search_query }}{% endif %}
+                     {% if current_filter and current_filter != 'all' %}&filter={{ current_filter }}{% endif %}
+                     {% if current_sort and current_sort != 'id' %}&sort={{ current_sort }}{% endif %}">
+                {{ num }}
+            </a>
         {% endif %}
     {% endfor %}
 
     <!-- Кнопка "Вперед" -->
     {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{request.GET.q}}{% endif %}">
+        <a href="?page={{ page_obj.next_page_number }}
+                 {% if search_query %}&q={{ search_query }}{% endif %}
+                 {% if current_filter and current_filter != 'all' %}&filter={{ current_filter }}{% endif %}
+                 {% if current_sort and current_sort != 'id' %}&sort={{ current_sort }}{% endif %}">
             <i class="fas fa-chevron-right"></i>
         </a>
     {% else %}
@@ -310,6 +338,6 @@
 
 </div>
 
-<script src="{% static 'main/js/users_list.js' %}"></script>
+<script src="{% static 'users/js/users_list.js' %}"></script>
 </body>
 </html>

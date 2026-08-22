@@ -14,102 +14,144 @@
 <body>
 <div class="container">
 
-  <!-- ЛОГОТИП -->
-  <div class="logo-area">
-    <div class="logo-icon"><i class="fas fa-code"></i></div>
-    <div class="logo-text">dev<span>Tracker</span></div>
-  </div>
+    <!-- ЛОГОТИП -->
+    <div class="logo-area">
+        <div class="logo-icon"><i class="fas fa-code"></i></div>
+        <div class="logo-text">dev<span>Tracker</span></div>
+    </div>
 
-  <!-- КАРТОЧКА РЕГИСТРАЦИИ -->
-  <div class="register-card">
-    <h1>Создать аккаунт</h1>
-    <p class="subtitle">Присоединяйтесь к сообществу разработчиков</p>
+    <!-- КАРТОЧКА РЕГИСТРАЦИИ -->
+    <div class="register-card">
+        <h1>Создать аккаунт</h1>
+        <p class="subtitle">Присоединяйтесь к сообществу разработчиков</p>
 
-    <form action = "{% url "users:registration" %}" method = "post">
-      {% csrf_token %}
-      <!-- Имя -->
-      <div class="form-group">
-        <label for="id_username"><i class="fas fa-user"></i> Имя и фамилия</label>
-        <input type="text" id="id_username" 
-        value = "{% if form.username.value %}{{form.username.value}}{% endif %}"
-        name = "username"
-        
-        placeholder="Алексей Иванов" required />
-      </div>
+        <!-- ✅ ВЫВОД СООБЩЕНИЙ -->
+        {% comment %} {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %} {% endcomment %}
 
-      <!-- Email -->
-      <div class="form-group">
-        <label for="id_email"><i class="fas fa-envelope"></i> Email</label>
-        <input type="email" id="id_email"
-        value =  "{% if form.email.value %}{{form.email.value}}{% endif %}"
-        name = "email"
-        placeholder="example@mail.com" required />
-      </div>
+        <!-- ✅ ВЫВОД ОШИБОК ФОРМЫ -->
+        {% if form.non_field_errors %}
+            <div class="alert alert-error">
+                {% for error in form.non_field_errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
 
-      <!-- Пароль -->
-      <div class="form-group">
-        <label for="id_password1"><i class="fas fa-lock"></i> Пароль</label>
-        <div class="password-wrapper">
-          <input type="password" id="id_password1" 
-          value = "{% if form.password1.value %}{{form.password1.value}}{% endif %}"
-          name = "password1"
-          
-          placeholder="Минимум 8 символов" required />
-          <button type="button" class="toggle-password" id="togglePassword">
-            <i class="fas fa-eye"></i>
-          </button>
+        <form action="{% url 'users:registration' %}" method="post">
+            {% csrf_token %}
+
+            <!-- Имя -->
+            <div class="form-group {% if form.username.errors %}has-error{% endif %}">
+                <label for="id_username"><i class="fas fa-user"></i> Имя и фамилия</label>
+                <input type="text" id="id_username" 
+                       name="username" 
+                       value="{{ form.username.value|default:'' }}"
+                       placeholder="Алексей Иванов" />
+                {% if form.username.errors %}
+                    <div class="field-error">
+                        {% for error in form.username.errors %}
+                            <i class="fas fa-exclamation-circle"></i> {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Email -->
+            <div class="form-group {% if form.email.errors %}has-error{% endif %}">
+                <label for="id_email"><i class="fas fa-envelope"></i> Email</label>
+                <input type="email" id="id_email" 
+                       name="email" 
+                       value="{{ form.email.value|default:'' }}"
+                       placeholder="example@mail.com" />
+                {% if form.email.errors %}
+                    <div class="field-error">
+                        {% for error in form.email.errors %}
+                            <i class="fas fa-exclamation-circle"></i> {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Пароль -->
+            <div class="form-group {% if form.password1.errors %}has-error{% endif %}">
+                <label for="id_password1"><i class="fas fa-lock"></i> Пароль</label>
+                <div class="password-wrapper">
+                    <input type="password" id="id_password1" 
+                           name="password1" 
+                           value="{{ form.password1.value|default:'' }}"
+                           placeholder="Минимум 8 символов" />
+                    <button type="button" class="toggle-password">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                {% if form.password1.errors %}
+                    <div class="field-error">
+                        {% for error in form.password1.errors %}
+                            <i class="fas fa-exclamation-circle"></i> {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Подтверждение пароля -->
+            <div class="form-group {% if form.password2.errors %}has-error{% endif %}">
+                <label for="id_password2"><i class="fas fa-lock"></i> Подтвердите пароль</label>
+                <div class="password-wrapper">
+                    <input type="password" id="id_password2" 
+                           name="password2" 
+                           value="{{ form.password2.value|default:'' }}"
+                           placeholder="Повторите пароль" />
+                    <button type="button" class="toggle-password">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                {% if form.password2.errors %}
+                    <div class="field-error">
+                        {% for error in form.password2.errors %}
+                            <i class="fas fa-exclamation-circle"></i> {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Согласие -->
+            <div class="checkbox-group">
+                <input type="checkbox" id="agree" required />
+                <label for="agree">
+                    Я принимаю <a href="#">условия использования</a> и <a href="#">политику конфиденциальности</a>
+                </label>
+            </div>
+
+            <!-- Кнопка -->
+            <button type="submit" class="btn-primary">
+                <i class="fas fa-user-plus"></i> Зарегистрироваться
+            </button>
+        </form>
+
+        <!-- Разделитель -->
+        <div class="divider">
+            <span>или продолжите с</span>
         </div>
-      </div>
 
-      <!-- Повтор пароля -->
-      <div class="form-group">
-        <label for="id_password2"><i class="fas fa-lock"></i> Подтвердите пароль</label>
-        <div class="password-wrapper">
-          <input type="password" id="id_password2" 
-          value = "{% if form.password2.value %}{{form.password2.value}}{% endif %}"
-          name = "password2"
-
-          placeholder="Повторите пароль" required />
-          <button type="button" class="toggle-password" id="toggleConfirmPassword">
-            <i class="fas fa-eye"></i>
-          </button>
+        <!-- Социальные кнопки -->
+        <div class="social-buttons">
+            <button class="social-btn google">
+                <i class="fab fa-google"></i> Google
+            </button>
+            <button class="social-btn github">
+                <i class="fab fa-github"></i> GitHub
+            </button>
         </div>
-      </div>
 
-      <!-- Согласие -->
-      <div class="checkbox-group">
-        <input type="checkbox" id="agree" required />
-        <label for="agree">
-          Я принимаю <a href="#">условия использования</a> и <a href="#">политику конфиденциальности</a>
-        </label>
-      </div>
-
-      <!-- Кнопка -->
-      <button type="submit" class="btn-primary" id="registerBtn">
-        <i class="fas fa-user-plus"></i> Зарегистрироваться
-      </button>
-    </form>
-
-    <!-- Разделитель -->
-    <div class="divider">
-      <span>или продолжите с</span>
+        <!-- Ссылка на вход -->
+        <div class="login-link">
+            Уже есть аккаунт? <a href="{% url 'users:login' %}">Войти</a>
+        </div>
     </div>
-
-    <!-- Социальные кнопки -->
-    <div class="social-buttons">
-      <button class="social-btn google">
-        <i class="fab fa-google"></i> Google
-      </button>
-      <button class="social-btn github">
-        <i class="fab fa-github"></i> GitHub
-      </button>
-    </div>
-
-    <!-- Ссылка на вход -->
-    <div class="login-link">
-      Уже есть аккаунт? <a href={% url "users:login" %}>Войти</a>
-    </div>
-  </div>
 
 </div>
 
@@ -132,62 +174,62 @@
     });
   });
 
-  // ========== РЕГИСТРАЦИЯ ==========
-  const registerBtn = document.getElementById('registerBtn');
-  const fullName = document.getElementById('fullName');
-  const email = document.getElementById('email');
-  const password = document.getElementById('password');
-  const confirmPassword = document.getElementById('confirmPassword');
-  const agree = document.getElementById('agree');
-
-  registerBtn.addEventListener('click', function() {
-    // Простая валидация
-    if (!fullName.value.trim()) {
-      alert('Введите имя и фамилию');
-      fullName.focus();
-      return;
-    }
-
-    if (!email.value.trim() || !email.value.includes('@')) {
-      alert('Введите корректный email');
-      email.focus();
-      return;
-    }
-
-    if (password.value.length < 8) {
-      alert('Пароль должен содержать минимум 8 символов');
-      password.focus();
-      return;
-    }
-
-    if (password.value !== confirmPassword.value) {
-      alert('Пароли не совпадают');
-      confirmPassword.focus();
-      return;
-    }
-
-    if (!agree.checked) {
-      alert('Примите условия использования');
-      return;
-    }
-
-    // Имитация успешной регистрации
-    const originalText = this.innerHTML;
-    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Регистрация...';
-    this.disabled = true;
-
-    setTimeout(() => {
-      alert('✅ Регистрация прошла успешно!');
-      this.innerHTML = originalText;
-      this.disabled = false;
-    }, 1500);
-  });
-
-  // Отправка по Enter
-  document.getElementById('registerForm').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      registerBtn.click();
+  // ========== ОБРАБОТКА ОТПРАВКИ ФОРМЫ ==========
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    const registerBtn = document.getElementById('registerBtn');
+    
+    if (form) {
+      form.addEventListener('submit', function(e) {
+        // Получаем поля
+        const username = document.getElementById('id_username');
+        const email = document.getElementById('id_email');
+        const password = document.getElementById('id_password1');
+        const confirmPassword = document.getElementById('id_password2');
+        const agree = document.getElementById('agree');
+        
+        // Валидация
+        let isValid = true;
+        let errorMessage = '';
+        
+        if (!username.value.trim()) {
+          errorMessage = 'Введите имя и фамилию';
+          username.focus();
+          isValid = false;
+        } else if (!email.value.trim() || !email.value.includes('@')) {
+          errorMessage = 'Введите корректный email';
+          email.focus();
+          isValid = false;
+        } else if (password.value.length < 8) {
+          errorMessage = 'Пароль должен содержать минимум 8 символов';
+          password.focus();
+          isValid = false;
+        } else if (password.value !== confirmPassword.value) {
+          errorMessage = 'Пароли не совпадают';
+          confirmPassword.focus();
+          isValid = false;
+        } else if (!agree.checked) {
+          errorMessage = 'Примите условия использования';
+          agree.focus();
+          isValid = false;
+        }
+        
+        if (!isValid) {
+          e.preventDefault(); // Останавливаем отправку
+          alert(errorMessage);
+          return false;
+        }
+        
+        // Если все ок - форма отправится автоматически
+        // Можно показать индикатор загрузки
+        if (registerBtn) {
+          registerBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Регистрация...';
+          registerBtn.disabled = true;
+        }
+        
+        // Форма отправится, ничего не preventing
+        return true;
+      });
     }
   });
 </script>

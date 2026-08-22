@@ -1,6 +1,9 @@
+from datetime import timedelta
+
 from django.contrib import auth
 from django.shortcuts import get_list_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
+from django.utils import timezone
 from django.views.generic import CreateView, DetailView, TemplateView, UpdateView
 from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.contrib.messages.views import SuccessMessageMixin
@@ -9,10 +12,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+from django.db.models import F, Q, Case, Count, ExpressionWrapper, FloatField, IntegerField, Value, When
+from django.db.models.functions import Cast
 
-
-from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth import login, update_session_auth_hash
 from django.contrib import messages
+from users.utils import count_leaders, get_leader_name, get_max_progress, get_users_with_stats
 
 
 
@@ -20,7 +25,7 @@ from users.forms import UserLoginForm, UserRegistrationForm, UserUpdateProfileFo
 
 
 from users.models import Progress, Tasks, Users
-from users.utils import get_activity_for_user, q_search
+from users.utils import get_activity_for_user, new_users_last_week, q_search
 
 
 
@@ -108,10 +113,28 @@ class UserRegistrationView(SuccessMessageMixin, CreateView):
 
     template_name = "users/registration.html"
     form_class = UserRegistrationForm
-    success_url = reverse_lazy("users:profile")
+    success_url = reverse_lazy("main:index")
     failure_url = "users:registration"
     success_message = "Вы успешно зарегистрировались"
     failure_message = "Неверные данные"
+    
+    def form_valid(self, form):
+        
+        # Сохраняем пользователя
+        response = super().form_valid(form)
+
+        
+        # Автоматически входим
+        login(self.request, self.object)
+        messages.success(self.request, self.success_message)
+        return response
+    
+    def form_invalid(self, form):
+        # Если форма невалидна, показываем ошибки
+        for field, errors in form.errors.items():
+            for error in errors:
+                messages.error(self.request, f'{field}: {error}')
+        return super().form_invalid(form)
 
 
 class UserLoginView(SuccessMessageMixin, LoginView):
@@ -129,35 +152,66 @@ class UserListView(ListView):
     context_object_name = (
         "users"  # Имя переменной в шаблоне (по умолчанию 'object_list')
     )
-    paginate_by = 2
+    paginate_by = 3
+
+    
+
+    def get_queryset(self):
+        # role_filter = self.request.GET.get("role")
+        # order_by = self.request.GET.get("order_by")
+        query = self.request.GET.get('q')
+        filter_type = self.request.GET.get('filter', 'all')  
+        sort_by = self.request.GET.get('sort', 'id')
+
+         # 🔍 ОТЛАДКА - проверяем параметры
+        print(f"🔍 Фильтр: {filter_type}, Сортировка: {sort_by}, Поиск: {query}")
+        
+
+        users = get_users_with_stats()
+        if filter_type == "leaders":
+            max_progress = get_max_progress()
+            users = users.filter(progress_percent=max_progress, progress_percent__gt=0)
+        if filter_type == "new":
+            users = users.filter(date_joined__gte=timezone.now() - timedelta(days=7))
+        
+
+        
+ 
+        if query:
+            users = users.filter(
+            Q(username__icontains=query) |
+            Q(email__icontains=query) |
+            Q(role__icontains=query)
+        )
+            print(f"🔍 Применен поиск: {query}")
+
+        if sort_by == "progress-desc":
+            users = users.order_by('-progress_percent','id')
+            print(f"🔍 Сортировка: по прогрессу ↓")
+        elif sort_by == "progress-asc":
+            users = users.order_by('progress_percent','id')
+            print(f"🔍 Сортировка: по прогрессу ↑")
+        elif sort_by == "tasks":
+            users = users.order_by('-completed_tasks','id')
+            print(f"🔍 Сортировка: по задачам ↓")
+        else:
+            users = users.order_by('id')
+            print(f"🔍 Сортировка: по умолчанию (ID)")
+        print(f"🔍 Найдено пользователей: {users.count()}")
+        return users
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["total_users"] = Users.objects.count()
+        context['new_in_last_week'] = new_users_last_week()
+        context['count_leaders'] = count_leaders()
+        context['leader_name'] = get_leader_name()
+        context['max_progress'] = get_max_progress()
+
+        context['current_filter'] = self.request.GET.get('filter', 'all')
+        context['current_sort'] = self.request.GET.get('sort', 'id')
+        context['search_query'] = self.request.GET.get('q', '')
         return context
-
-    def get_queryset(self):
-        role_filter = self.request.GET.get("role")
-        order_by = self.request.GET.get("order_by")
-        query = self.request.GET.get('q')
-
-        users = Users.objects.all()
- 
-        if query:
-            users = q_search(query)
-        else:
-            users = Users.objects.all()
-
-        # if on_sale:
-        #     goods =  goods.filter(discount__gt=0)
-
-        # if order_by and order_by !=  "default":  
-        #     goods= goods.order_by(order_by)
-        
-
-        return users
-
-    # Количество объектов на странице
 
 
 # views.py - Минимальный код!

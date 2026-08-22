@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserChangeForm, UserCreationForm
+from django.contrib.auth.password_validation import validate_password
 from users.models import Users
 from django.forms import CharField, ImageField
 
@@ -18,15 +19,64 @@ class UserLoginForm(AuthenticationForm):
 
 
 class UserRegistrationForm(UserCreationForm):
+    username = forms.CharField(
+        label='Имя пользователя',
+        max_length=100,
+        help_text='Обязательное поле. Не более 150 символов.'
+    )
+    email = forms.EmailField(
+        label='Email',
+        help_text='Введите действующий email'
+    )
+    password1 = forms.CharField(
+        label='Пароль',
+        widget=forms.PasswordInput,
+        help_text='Пароль должен содержать не менее 8 символов'
+    )
+    password2 = forms.CharField(
+        label='Подтверждение пароля',
+        widget=forms.PasswordInput,
+        help_text='Введите тот же пароль для подтверждения'
+    )
 
     class Meta:
         model = Users
         fields = ('username', 'email', 'password1', 'password2')
 
-    username = forms.CharField(label='Username', max_length=100)
-    email = forms.EmailField(label='Email')
-    password1 = forms.CharField(widget=forms.PasswordInput())
-    password2 = forms.CharField(widget=forms.PasswordInput())
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if Users.objects.filter(email=email).exists():
+            raise forms.ValidationError('Этот email уже используется')
+        return email
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if Users.objects.filter(username=username).exists():
+            raise forms.ValidationError('Это имя пользователя уже занято')
+        return username
+
+    def clean_password2(self):
+        password1 = self.cleaned_data.get('password1')
+        password2 = self.cleaned_data.get('password2')
+        
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError('Пароли не совпадают')
+        
+        return password2
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password1 = cleaned_data.get('password1')
+        username = cleaned_data.get('username')
+        
+        # Свои сообщения об ошибках
+        if password1 and username:
+            if password1.lower() in username.lower() or username.lower() in password1.lower():
+                raise forms.ValidationError(
+                    'Пароль слишком похож на имя пользователя'
+                )
+        
+        return cleaned_data
 
 
 class UserUpdateProfileForm(forms.ModelForm):

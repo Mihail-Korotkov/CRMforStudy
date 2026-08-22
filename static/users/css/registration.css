@@ -289,6 +289,56 @@ body {
   text-decoration: underline;
 }
 
+.form-group.has-error input {
+    border-color: #ef4444;
+    background-color: #fef2f2;
+}
+
+.field-error {
+    color: #dc2626;
+    font-size: 0.85rem;
+    margin-top: 0.3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.field-error i {
+    font-size: 0.75rem;
+}
+
+/* Сообщения (alert) */
+.alert {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+}
+
+.alert-success {
+    color: #166534;
+    background-color: #dcfce7;
+    border-color: #86efac;
+}
+
+.alert-error {
+    color: #991b1b;
+    background-color: #fee2e2;
+    border-color: #fca5a5;
+}
+
+.alert-warning {
+    color: #92400e;
+    background-color: #fef3c7;
+    border-color: #fcd34d;
+}
+
+.alert-info {
+    color: #1e40af;
+    background-color: #dbeafe;
+    border-color: #93c5fd;
+}
+
 /* ===== АДАПТИВ ===== */
 @media (max-width: 480px) {
   body { padding: 1rem; }
