@@ -1,0 +1,15 @@
+venv/
+.pylintrc
+__pycache__/
+
+.vscode
+.idea
+
+db.sqlite3
+media/
+
+.gigacode_vsc
+
+gigacode.json
+
+cache/
