@@ -647,6 +647,7 @@ body {
   display: flex;
   align-items: center;
   gap: 0.8rem;
+  display: block;
 }
 
 .toast.show {
@@ -656,6 +657,52 @@ body {
 .toast.error {
   background: #dc2626;
 }
+
+/* /*======ССЫЛКИ=====* */
+.profile-form-fields {
+  display: flex;
+  flex-direction: column;  /* ✅ вместо row → column */
+  gap: 0.8rem;            /* ✅ отступы между полями */
+  margin: 1rem 0;
+  width: 100%;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;  /* ✅ label сверху, input снизу */
+  gap: 0.3rem;
+  width: 100%;
+}
+
+.field-group label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #1e293b;
+}
+
+.field-group label i {
+  color: #4f46e5;
+  margin-right: 0.3rem;
+}
+
+.field-group input {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  border: 1px solid #e9eef3;
+  border-radius: 30px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  outline: none;
+  transition: 0.2s;
+  background: #f8fafc;
+}
+
+.field-group input:focus {
+  border-color: #4f46e5;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
 
 /* ===== ПОДВАЛ ===== */
 .footer {

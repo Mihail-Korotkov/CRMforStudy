@@ -37,15 +37,19 @@
         />
     </div>
 </form>
+      {% if not user.is_authenticated %}
       <a href = "{% url 'users:registration' %}" class="btn-primary">
         <i class="fas fa-plus-circle"></i> Стать участником
       </a>
+      {% endif %}
       <a href = "{% url 'main:about' %}" class="btn-primary">
         <i class="fas fa-plus-circle"></i> О нас
       </a>
+      {% if user.is_authenticated %}
       <a href = "{% url 'users:cabinet' %}" class="btn-primary">
         <i class="fas fa-plus-circle"></i> Личный кабинет
       </a>
+      {% endif %}
 
     </div>
   </header>
@@ -272,7 +276,7 @@
 
   <!-- footer -->
   <div style="margin-top: 3rem; text-align: center; color: #94a3b8; font-size: 0.85rem; border-top: 1px solid #e9eef3; padding-top: 2rem;">
-    <i class="fas fa-sync-alt fa-fw"></i> Обновлено сегодня · 
+    <i class="fas fa-sync-alt fa-fw"></i> 
   </div>
 
 </div>

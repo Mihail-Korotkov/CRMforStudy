@@ -216,6 +216,8 @@ a {
   border-radius: 20px;
   background: #eef2ff;
   display: flex;
+  min-width: 48px;
+  max-width: 48px;
   align-items: center;
   justify-content: center;
   font-weight: 700;
@@ -337,6 +339,27 @@ a {
 
 .member-card-link:hover .member-card {
     box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+.member-card .avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 18px;
+    color: #1e293b;
+    flex-shrink: 0;
+    overflow: hidden; /* Важно! Обрезает изображение */
+}
+
+.member-card .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Сохраняет пропорции и заполняет контейнер */
+    border-radius: 50%;
 }
 
 /* Адаптив для кнопки выхода */
