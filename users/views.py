@@ -9,7 +9,7 @@ from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import CreateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views import View
+from django.views import View, generic
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import F, Q, Case, Count, ExpressionWrapper, FloatField, IntegerField, Value, When
@@ -17,7 +17,14 @@ from django.db.models.functions import Cast
 
 from django.contrib.auth import login, update_session_auth_hash
 from django.contrib import messages
+from users import serializers
 from users.utils import count_leaders, get_leader_name, get_max_progress, get_users_with_stats
+
+from users.serializers import *
+from rest_framework import viewsets,generics
+
+
+
 
 
 
@@ -278,3 +285,18 @@ def toggle_task_simple(request, task_id):
         messages.error(request, 'Задача не найдена')
     
     return redirect('users:cabinet')
+
+#//////////////////////////////////   API - Views   ///////////////////////////////////
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = Users.objects.all()
+    serializer_class = UserSerializer
+
+class TaskAPIView(generics.ListAPIView):
+    queryset = Tasks.objects.all()
+    serializer_class = TaskSerializer
+
+
+class ProgressAPIView(generics.ListAPIView):
+    queryset = Progress.objects.all()
+    serializer_class = ProgressSerializer

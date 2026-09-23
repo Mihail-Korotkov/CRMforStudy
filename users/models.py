@@ -17,6 +17,8 @@ class Users(AbstractUser):
     github_url = models.URLField(max_length=200, blank=True, null=True)
     linkedin_url = models.URLField(max_length=200, blank=True, null=True)
     telegram_url = models.URLField(max_length=200, blank=True, null=True)
+    # task_id = models.ForeignKey('Tasks', on_delete=models.CASCADE,null=True,blank=True)
+
 
     @property
     def days_on_platform(self):
@@ -42,6 +44,7 @@ class Tasks(models.Model):
     created_at = models.DateTimeField(auto_now_add=True,verbose_name='дата создания')
     updated_at = models.DateTimeField(auto_now=True,verbose_name='дата обновления')
     status=models.BooleanField(default=False,verbose_name='статус')
+    # user_id = models.ForeignKey(Users, on_delete=models.CASCADE,verbose_name='пользователь')
 
     class Meta:
         verbose_name = 'задача'

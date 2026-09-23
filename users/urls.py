@@ -1,5 +1,10 @@
-from django.urls import path
+from django.urls import include, path
 from users import views
+from rest_framework import routers
+
+router = routers.SimpleRouter()
+router.register(r'', views.UserViewSet)
+
 
 app_name = 'users'
 urlpatterns = [
@@ -16,7 +21,14 @@ urlpatterns = [
     path('cabinet/add-task-simple/',views.add_task_simple, name='add_task_simple'),
     path('cabinet/delete-task-simple/<int:task_id>/',views.delete_task_simple, name='delete_task_simple'),
     path('cabinet/toggle-task-simple/<int:task_id>/', views.toggle_task_simple, name='toggle_task_simple'),
+    path('api/users/', include(router.urls)),
+    path('api/tasks/', views.TaskAPIView.as_view()),
+    path('api/progress/', views.ProgressAPIView.as_view()),
     
     
+
+
+    
+
     
 ]

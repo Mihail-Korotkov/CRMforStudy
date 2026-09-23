@@ -38,12 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.postgres',
+    
+
 
 
 
     'main',
     'users',
-    
+    'rest_framework',
 
 ]
 
