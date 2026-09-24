@@ -300,3 +300,5 @@ class TaskAPIView(generics.ListAPIView):
 class ProgressAPIView(generics.ListAPIView):
     queryset = Progress.objects.all()
     serializer_class = ProgressSerializer
+
+
