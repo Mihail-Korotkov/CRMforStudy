@@ -22,6 +22,8 @@ from users.utils import count_leaders, get_leader_name, get_max_progress, get_us
 
 from users.serializers import *
 from rest_framework import viewsets,generics
+from rest_framework.permissions import IsAdminUser
+
 
 
 
@@ -291,14 +293,17 @@ def toggle_task_simple(request, task_id):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = Users.objects.all()
     serializer_class = UserSerializer
+    permission_classes = (IsAdminUser,)
 
 class TaskAPIView(generics.ListAPIView):
     queryset = Tasks.objects.all()
     serializer_class = TaskSerializer
+    permission_classes = (IsAdminUser,)
 
 
 class ProgressAPIView(generics.ListAPIView):
     queryset = Progress.objects.all()
     serializer_class = ProgressSerializer
+    permission_classes = (IsAdminUser,)
 
 
